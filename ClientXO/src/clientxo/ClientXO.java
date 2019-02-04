@@ -22,7 +22,7 @@ public class ClientXO extends Application {
     // to make application movable by mouse
     private double xOffset = 0; 
     private double yOffset = 0;
-    
+    private static Stage globalStage ;
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));                
@@ -39,9 +39,18 @@ public class ClientXO extends Application {
             stage.setX(event.getScreenX() - xOffset);
             stage.setY(event.getScreenY() - yOffset);
         });
-        
+        globalStage = stage;
         stage.setScene(scene);
         stage.show();
+        
+    }
+
+    public static Stage getGlobalStage() {
+        return globalStage;
+    }
+
+    public static void setGlobalStage(Stage globalStage) {
+        ClientXO.globalStage = globalStage;
     }
     
     

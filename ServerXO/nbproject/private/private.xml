@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/ITI/Java%20Labs/TicTacToeProject/ServerXO/src/serverxo/FXMLDocument.fxml</file>
-            <file>file:/E:/ITI/Java%20Labs/TicTacToeProject/ServerXO/src/serverxo/FXMLDocumentController.java</file>
-            <file>file:/E:/ITI/Java%20Labs/TicTacToeProject/ServerXO/src/serverxo/ServerXO.java</file>
+            <file>file:/D:/ITI/Java/Java%20Project/ServerXO/src/serverxo/ServerXO.java</file>
+            <file>file:/D:/ITI/Java/Java%20Project/ServerXO/src/Game/GameController.java</file>
+            <file>file:/D:/ITI/Java/Java%20Project/ServerXO/src/Database/DBManger.java</file>
+            <file>file:/D:/ITI/Java/Java%20Project/ServerXO/src/Game/Player.java</file>
+            <file>file:/D:/ITI/Java/Java%20Project/ServerXO/src/Network/Message.java</file>
+            <file>file:/D:/ITI/Java/Java%20Project/ServerXO/src/Game/Client.java</file>
         </group>
     </open-files>
 </project-private>

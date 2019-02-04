@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -33,6 +35,11 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML 
     private Button closeBtn, minBtn;
+    
+//    @FXML
+//    private TableColumn<, String> tblNames, tblScore;
+//    @FXML
+//    private TableView<> tableScores;
 
     
 @FXML

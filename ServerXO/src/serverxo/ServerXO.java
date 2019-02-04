@@ -5,6 +5,8 @@
  */
 package serverxo;
 
+import Database.DBManger;
+import Game.GameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,16 +20,17 @@ import javafx.stage.StageStyle;
  * @author EgyJuba
  */
 public class ServerXO extends Application {
-        
-    private double x = 0; 
+
+    private double x = 0;
     private double y = 0;
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+
         Scene scene = new Scene(root);
         stage.initStyle(StageStyle.UNDECORATED);
-        
+
         // to make the stage movable 
         root.setOnMousePressed((MouseEvent event) -> {
             x = event.getSceneX();
@@ -37,9 +40,10 @@ public class ServerXO extends Application {
             stage.setX(event.getScreenX() - x);
             stage.setY(event.getScreenY() - y);
         });
-        
         stage.setScene(scene);
         stage.show();
+        GameController gc = new  GameController();
+        gc.start();
     }
 
     /**
@@ -47,6 +51,7 @@ public class ServerXO extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+
     }
-    
+
 }

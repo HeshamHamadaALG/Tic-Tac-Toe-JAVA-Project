@@ -5,6 +5,8 @@
  */
 package clientxo.game;
 
+import clientxo.FXMLDocumentController;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -136,6 +138,12 @@ private void Btn9(ActionEvent e){
         playCount++;
         btn9.setDisable(true);
         System.out.println("Cell 9 clcicked");
+}
+
+@FXML
+private void backAction(ActionEvent event) throws IOException{
+    new FXMLDocumentController().playTypeWindow();
+        System.out.println("Back Pressed");
 }
     @Override
     public void initialize(URL url, ResourceBundle rb) {

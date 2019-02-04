@@ -51,7 +51,7 @@
                   <Glow />
                </effect>
             </Button>
-            <PasswordField layoutX="45.0" layoutY="196.0" prefHeight="42.0" prefWidth="270.0" promptText="Password" style="-fx-background-color: #ffffff;">
+            <PasswordField fx:id="password" layoutX="45.0" layoutY="196.0" prefHeight="42.0" prefWidth="270.0" promptText="Password" style="-fx-background-color: #ffffff;">
                <font>
                   <Font size="18.0" />
                </font>
@@ -60,7 +60,7 @@
                </cursor>
             </PasswordField>
             <Line endX="161.5999755859375" endY="-0.600006103515625" layoutX="150.0" layoutY="242.0" opacity="0.8" startX="-101.0" startY="-0.600006103515625" />
-            <TextField layoutX="45.0" layoutY="113.0" prefHeight="42.0" prefWidth="277.0" promptText="Username" style="-fx-background-color: #ffffff;">
+            <TextField fx:id="name" layoutX="45.0" layoutY="113.0" prefHeight="42.0" prefWidth="277.0" promptText="Username" style="-fx-background-color: #ffffff;">
                <font>
                   <Font size="18.0" />
                </font>
@@ -83,6 +83,17 @@
          <font>
             <Font size="14.0" />
          </font>
+      </Button>
+      <Button layoutX="11.0" layoutY="399.0" mnemonicParsing="false" onAction="#backAction" opacity="0.7" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #543D9E; -fx-border-color: #ffffff; -fx-border-radius: 40; -fx-background-radius: 40;" text="&lt;= Back" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </Button>
     </children>
 </AnchorPane>

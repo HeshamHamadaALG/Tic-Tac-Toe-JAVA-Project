@@ -26,10 +26,10 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <TableView layoutX="492.0" layoutY="41.0" prefHeight="530.0" prefWidth="394.0">
+      <TableView fx:id="tableScores" layoutX="492.0" layoutY="41.0" prefHeight="530.0" prefWidth="394.0">
          <columns>
-            <TableColumn editable="false" prefWidth="191.20004272460938" text="Names" />
-            <TableColumn editable="false" prefWidth="113.59991455078125" text="Score" />
+            <TableColumn fx:id="tblNames" editable="false" prefWidth="191.20004272460938" text="Names" />
+            <TableColumn fx:id="tblScore" editable="false" prefWidth="113.59991455078125" text="Score" />
             <TableColumn prefWidth="88.0" text="On/Off" />
          </columns>
       </TableView>

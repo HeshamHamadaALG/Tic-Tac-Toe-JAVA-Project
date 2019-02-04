@@ -5,6 +5,7 @@
  */
 package clientxo.playerForm;
 
+import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -56,47 +57,21 @@ private void minButtonAction(){
 
 @FXML
 private void SingleButtonAction(ActionEvent event) throws IOException{
-    // sign up Button
-    Parent SignupView = FXMLLoader.load(getClass().getResource("../game/GameCore.fxml"));
-    Scene SignupScene = new Scene(SignupView);
-    Stage signupwindow = (Stage)((Node)event.getSource()).getScene().getWindow();
-    
-    // to make the stage movable 
-        SignupView.setOnMousePressed((MouseEvent e) -> {
-            x = e.getSceneX();
-            y = e.getSceneY();
-        });
-        SignupView.setOnMouseDragged((MouseEvent e) -> {
-            signupwindow.setX(e.getScreenX() - x);
-            signupwindow.setY(e.getScreenY() - y);
-        });
-    
-    signupwindow.setScene(SignupScene);
-    signupwindow.show();
-    System.out.println("sign-up Pressed");
+    new FXMLDocumentController().singlePlayWindow();
+        System.out.println("Single Player Pressed");
 }
 
 
 @FXML
 private void MultiButtonAction(ActionEvent event) throws IOException{
-    // Login Butto
-    Parent loginView = FXMLLoader.load(getClass().getResource("../game/GameCore.fxml"));
-    Scene loginScene = new Scene(loginView);
-    Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-    
-    // to make the stage movable 
-        loginView.setOnMousePressed((MouseEvent e) -> {
-            x = e.getSceneX();
-            y = e.getSceneY();
-        });
-        loginView.setOnMouseDragged((MouseEvent e) -> {
-            window.setX(e.getScreenX() - x);
-            window.setY(e.getScreenY() - y);
-        });
-    
-    window.setScene(loginScene);
-    window.show();
-    System.out.println("Login Pressed");
+    new FXMLDocumentController().multiPlayWindow();
+        System.out.println("Multi Player Pressed");
+}
+
+@FXML
+private void backAction(ActionEvent event) throws IOException{
+    new FXMLDocumentController().mainWindow();
+        System.out.println("Back Pressed");
 }
     
     @Override

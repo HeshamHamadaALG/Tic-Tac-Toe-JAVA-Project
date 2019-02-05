@@ -5,7 +5,8 @@
  */
 package clientxo.login;
 
-import Network.Client;
+import Network.*;
+import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.Socket;
@@ -38,7 +39,6 @@ public class loginController implements Initializable {
     public TextField name;
     @FXML
     public PasswordField password;
-    Client client;
 
 
     @FXML
@@ -67,7 +67,8 @@ public class loginController implements Initializable {
     @FXML
     private void GameAction(ActionEvent event) throws IOException {
         // Login Button
-        new FXMLDocumentController().playTypeWindow();
+        Message msg = new Message("Login",new String []{name.getText(),password.getText()});
+        ClientXO.client.sendMessage(msg);
         System.out.println("Login Pressed");
     }
 
@@ -79,13 +80,7 @@ public class loginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            // TODO
-            client = new Client(new Socket("localhost", 8901));
-            client.start();
-        } catch (IOException ex) {
-            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }
 
 }

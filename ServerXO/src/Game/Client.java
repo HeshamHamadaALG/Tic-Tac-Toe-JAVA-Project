@@ -32,12 +32,17 @@ class Client extends Thread {
         while (isLogin == -1) {
             try {
                 Message msg = (Message) input.readObject();
+                System.out.println(msg.getType());
+                System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
                 if ("Login".equals(msg.getType())) {
                     isLogin = GameController.dbManger.login(msg.getData()[0], msg.getData()[1]);
                 }
-                if(isLogin!=-1)
+                System.out.println("Login Result:" + isLogin);
+                if (isLogin != -1) {
                     makePlayerOnline(this, isLogin);
-                else output.writeObject(new Message("Login",new String[]{"Wrong"}));
+                } else {
+                    output.writeObject(new Message("Login", new String[]{"Wrong"}));
+                }
                 System.out.println(msg.getType());
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
@@ -50,13 +55,24 @@ class Client extends Thread {
 
     public void makePlayerOnline(Client client, int id) {
         int playersLength = GameController.players.size();
+        try {
+            // send accept message
+            System.out.println("Sending Accept Message");
+            Message msg = new Message("Login", new String[]{"Accept"});
+            output.writeObject(msg);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
         for (int i = 0; i < playersLength; i++) {
             Player p = GameController.players.get(i);
             if (p.id == id) {
-                p.client = client;
+                p.socket = client.socket;
+                p.output = client.output;
+                p.input = client.input;
                 p.start();
             }
         }
+
     }
 
 }

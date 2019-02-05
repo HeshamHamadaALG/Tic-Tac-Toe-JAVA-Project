@@ -5,6 +5,12 @@
  */
 package clientxo;
 
+import Network.Client;
+import clientxo.login.loginController;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,18 +24,20 @@ import javafx.stage.StageStyle;
  * @author EgyJuba
  */
 public class ClientXO extends Application {
-    
+
     // to make application movable by mouse
-    private double xOffset = 0; 
+    private double xOffset = 0;
     private double yOffset = 0;
-    private static Stage globalStage ;
+    private static Stage globalStage;
+    public static Client client;
+
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));                
-        Scene scene = new Scene(root);    
-        
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Scene scene = new Scene(root);
+
         stage.initStyle(StageStyle.UNDECORATED);
-        
+
         // to make the stage movable 
         root.setOnMousePressed((MouseEvent event) -> {
             xOffset = event.getSceneX();
@@ -42,7 +50,14 @@ public class ClientXO extends Application {
         globalStage = stage;
         stage.setScene(scene);
         stage.show();
-        
+        try {
+            // TODO
+            client = new Client(new Socket("localhost", 8901));
+            client.start();
+        } catch (IOException ex) {
+            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public static Stage getGlobalStage() {
@@ -52,9 +67,6 @@ public class ClientXO extends Application {
     public static void setGlobalStage(Stage globalStage) {
         ClientXO.globalStage = globalStage;
     }
-    
-    
-    
 
     /**
      * @param args the command line arguments
@@ -62,5 +74,5 @@ public class ClientXO extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

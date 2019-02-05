@@ -39,7 +39,6 @@ public class GameController extends Thread {
                 System.out.println("Listening");
                 Socket s = new Socket();
                 s = listener.accept();
-                System.out.println("Hello");
                 System.out.println("New Client Connected");
                 Client client = new Client(s,new ObjectInputStream(s.getInputStream()),new ObjectOutputStream(s.getOutputStream()));
                 client.start();

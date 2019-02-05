@@ -7,8 +7,8 @@ package Game;
 
 import Network.Message;
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -18,12 +18,14 @@ import java.util.logging.Logger;
  *
  * @author LapTop MarKet
  */
-
 public class Player extends Thread {
 
     char mark;
     Player opponent;
-    Client client;
+    Socket socket;
+    ObjectInputStream input;
+    ObjectOutputStream output;
+    Game game;
     int id;
     String name;
     int points;
@@ -35,38 +37,23 @@ public class Player extends Thread {
      */
     public Player() {
         this.id = -1;
-        this.client=null;
+        this.socket = null;
         this.isOnline = false;
     }
 
-    public Player(int ID,String name,int points) {
+    public Player(int ID, String name, int points) {
         this.id = ID;
-        this.name= name;
+        this.name = name;
         this.points = points;
-        this.client=null;
+        this.socket = null;
         this.isOnline = false;
     }
 
-//    public Player(Socket socket, char mark) {
-//        this.client.socket = socket;
-//        this.mark = mark;
-//        try {
-//            input = new BufferedReader(
-//                    new InputStreamReader(socket.getInputStream()));
-//            output = new PrintWriter(socket.getOutputStream(), true);
-//            output.println("WELCOME " + mark);
-//            output.println("MESSAGE Waiting for opponent to connect");
-//        } catch (IOException e) {
-//            System.out.println("Player died: " + e);
-//        }
-//    }
 
     public void run() {
         try {
-            client.output.writeObject(new Message("Login",new String[]{"Accept"}));
             while (true) {
-                Message msg = (Message) client.input.readObject();
-                System.out.println(msg.getData()[0]);
+                Message msg = (Message) input.readObject();
             }
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,5 +73,4 @@ public class Player extends Thread {
     /**
      * Handles the otherPlayerMoved message.
      */
-
 }

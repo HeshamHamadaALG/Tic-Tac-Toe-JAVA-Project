@@ -5,6 +5,7 @@
  */
 package Network;
 
+import clientxo.FXMLDocumentController;
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -19,17 +20,18 @@ public class Client extends Thread {
     Socket socket;
     ObjectInputStream input;
     ObjectOutputStream output;
+
     public Client(Socket socket, ObjectInputStream input, ObjectOutputStream output) {
         this.socket = socket;
         this.input = input;
         this.output = output;
     }
-    
+
     public Client(Socket socket) throws IOException {
         this.socket = socket;
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
-        
+
     }
 
     public void sendMessage(Message msg) {
@@ -41,21 +43,29 @@ public class Client extends Thread {
     }
 
     public void run() {
-//        while (true) {
-//            //                output.writeObject(new Message("LOGIN",new String[]{"Hello"}));
-//            Message msg = recieveMessage();
-//        }
+        Message msg = null;
+        boolean isLogged = false;
+        while(!isLogged){
+            try {
+                msg = (Message) input.readObject();
+                if (msg.getType().equals("Login")) {
+                    System.out.println(msg.getData()[0]);
+                    isLogged=handleLogin(msg);
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
-    public Message recieveMessage() {
-        Message msg=null;
-        try {
-            msg = (Message) input.readObject();
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+    public boolean handleLogin(Message msg) {
+        if (msg.getData()[0].equals("Accept")) {
+            new FXMLDocumentController().playTypeWindow();
+            return true;
         }
-        return msg;
+        return false;
     }
+
 }

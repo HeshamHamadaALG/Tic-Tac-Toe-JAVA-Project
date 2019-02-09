@@ -59,8 +59,18 @@ public class Client extends Thread {
                     multiPlay();
                      System.out.println(msg.getType());
                 }
-                else if( msg.getType().equals("Hello"))
-                    System.out.println("Hello");
+                else if( msg.getType().equals("StartEasyGame")){
+                     System.out.println(msg.getType());
+                     new FXMLDocumentController().gameWindow();
+                }
+                else if(msg.getType().equals("StartMediumGame")){
+                    System.out.println(msg.getType());
+                    new FXMLDocumentController().gameWindow();
+                }
+                else if(msg.getType().equals("StartHardGame")){
+                    System.out.println(msg.getType());
+                    new FXMLDocumentController().gameWindow();
+                }
                 //end
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

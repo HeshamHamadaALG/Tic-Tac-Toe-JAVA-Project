@@ -5,7 +5,9 @@
  */
 package clientxo.game;
 
+import Network.Message;
 import clientxo.FXMLDocumentController;
+import clientxo.ClientXO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -69,11 +71,11 @@ public Image CountPlayer(){
 @FXML 
 private void Btn1(ActionEvent e){
         btn1 = (Button) e.getSource();
-        btn1.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+//        btn1.setGraphic(new ImageView(CountPlayer()));
+//        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 0 0",new String []{Integer.toString(ClientXO.getId())}));
         btn1.setDisable(true);
         System.out.println("Cell 1 clcicked");
-
 }
 @FXML
 private void Btn2(ActionEvent e){

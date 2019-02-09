@@ -53,12 +53,12 @@ class Client extends Thread {
         }
     }
 
-    public void makePlayerOnline(Client client, int id) {
+    public void makePlayerOnline(Client client, int id){
         int playersLength = GameController.players.size();
         try {
             // send accept message
             System.out.println("Sending Accept Message");
-            Message msg = new Message("Login", new String[]{"Accept"});
+            Message msg = new Message("Login", new String[]{"Accept",Integer.toString(id)});
             output.writeObject(msg);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,7 +69,17 @@ class Client extends Thread {
                 p.socket = client.socket;
                 p.output = client.output;
                 p.input = client.input;
+                
+                //sara to make player online
+                p.isOnline= true;
+                // end 
+                
                 p.start();
+                try {
+                    p.output.writeObject(new Message("Hello",new String[]{}));
+                } catch (IOException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 

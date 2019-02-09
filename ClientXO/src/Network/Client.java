@@ -5,6 +5,7 @@
  */
 package Network;
 
+import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
 import java.io.*;
 import java.net.Socket;
@@ -20,7 +21,7 @@ public class Client extends Thread {
     Socket socket;
     ObjectInputStream input;
     ObjectOutputStream output;
-
+    
     public Client(Socket socket, ObjectInputStream input, ObjectOutputStream output) {
         this.socket = socket;
         this.input = input;
@@ -45,27 +46,42 @@ public class Client extends Thread {
     public void run() {
         Message msg = null;
         boolean isLogged = false;
-        while(!isLogged){
+        //sara change !isLogged to true
+        while (true) {
             try {
                 msg = (Message) input.readObject();
                 if (msg.getType().equals("Login")) {
                     System.out.println(msg.getData()[0]);
-                    isLogged=handleLogin(msg);
+                    isLogged = handleLogin(msg);
                 }
+                //sara
+                else if (msg.getType().equals("multiPlay")) {
+                    multiPlay();
+                     System.out.println(msg.getType());
+                }
+                else if( msg.getType().equals("Hello"))
+                    System.out.println("Hello");
+                //end
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+       
     }
 
     public boolean handleLogin(Message msg) {
         if (msg.getData()[0].equals("Accept")) {
+            ClientXO.setId(Integer.parseInt(msg.getData()[1]));
             new FXMLDocumentController().playTypeWindow();
             return true;
         }
         return false;
+    }
+    
+    public void multiPlay (){
+      new FXMLDocumentController().gameWindow();
     }
 
 }

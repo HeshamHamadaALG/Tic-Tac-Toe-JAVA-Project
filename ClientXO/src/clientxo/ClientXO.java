@@ -30,7 +30,16 @@ public class ClientXO extends Application {
     private double yOffset = 0;
     private static Stage globalStage;
     public static Client client;
+    public static int id;
 
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        ClientXO.id = id;
+    }
+    
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
@@ -53,10 +62,13 @@ public class ClientXO extends Application {
         try {
             // TODO
             client = new Client(new Socket("localhost", 8901));
+           
             client.start();
         } catch (IOException ex) {
             Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
 
     }
 

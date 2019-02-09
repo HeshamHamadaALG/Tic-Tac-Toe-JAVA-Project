@@ -5,6 +5,8 @@
  */
 package clientxo.playerForm;
 
+import Network.Message;
+import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import player.Player;
 
 /**
  *
@@ -64,8 +67,13 @@ private void SingleButtonAction(ActionEvent event) throws IOException{
 
 @FXML
 private void MultiButtonAction(ActionEvent event) throws IOException{
-    new FXMLDocumentController().multiPlayWindow();
+   
         System.out.println("Multi Player Pressed");
+        //sara 
+         Message msg = new Message("multiPlay",new String []{Integer.toString(ClientXO.getId()),"2"});
+         ClientXO.client.sendMessage(msg);
+         
+         //end
 }
 
 @FXML

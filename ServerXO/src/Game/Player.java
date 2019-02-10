@@ -31,8 +31,8 @@ public class Player extends Thread {
     ObjectInputStream input;
     ObjectOutputStream output;
     Game game;
-    int id;
-    String name;
+    int idnum;
+    String names;
     int points;
     boolean isOnline;
 
@@ -41,14 +41,14 @@ public class Player extends Thread {
      * stream fields, displays the first two welcoming messages.
      */
     public Player() {
-        this.id = -1;
+        this.idnum = -1;
         this.socket = null;
         this.isOnline = false;
     }
 
     public Player(int ID, String name, int points) {
-        this.id = ID;
-        this.name = name;
+        this.idnum = ID;
+        this.names = name;
         this.points = points;
         this.socket = null;
         this.isOnline = false;
@@ -69,7 +69,7 @@ public class Player extends Thread {
                        p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
                        p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
                         if (p2.isOnline) {
-                            Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.id), Integer.toString(p2.id)}));
+                            Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                             p2.output.writeObject(playRequest);
                         }
                 } else if (msg.getType().equals("playRequest")) {
@@ -77,12 +77,12 @@ public class Player extends Thread {
                         p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
                         p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
                         if (p1.isOnline && p2.isOnline) {
-                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.id), Integer.toString(p2.id)}));
+                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                             p1.output.writeObject(outputMsg);
                             p2.output.writeObject(outputMsg);
                         }
                     } else {
-                        Message rejected = (new Message("reject", new String[]{Integer.toString(p1.id), Integer.toString(p2.id)}));
+                        Message rejected = (new Message("reject", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                         p1.output.writeObject(rejected);
                     }
                 }
@@ -117,6 +117,79 @@ public class Player extends Thread {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public char getMark() {
+        return mark;
+    }
+
+    public void setMark(char mark) {
+        this.mark = mark;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public ObjectInputStream getInput() {
+        return input;
+    }
+
+    public void setInput(ObjectInputStream input) {
+        this.input = input;
+    }
+
+    public ObjectOutputStream getOutput() {
+        return output;
+    }
+
+    public void setOutput(ObjectOutputStream output) {
+        this.output = output;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public int getIdnum() {
+        return idnum;
+    }
+
+    public void setIdnum(int idnum) {
+        this.idnum = idnum;
+    }
+
+    public String getNames() {
+        return names;
+    }
+
+    public void setNames(String names) {
+        this.names = names;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public boolean isIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
+    }
+    
 //        /**
 //         * Accepts notification of who the opponent is.
 //         */
@@ -135,16 +208,16 @@ public class Player extends Thread {
         Player p2 = null;
         System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
         for (int i = 0; i < playersSize; i++) {
-            if (players.get(i).id == Integer.parseInt(msg.getData()[0])) {
+            if (players.get(i).idnum == Integer.parseInt(msg.getData()[0])) {
                 p1 = players.get(i);
             }
-            if (players.get(i).id == Integer.parseInt(msg.getData()[1])) {
+            if (players.get(i).idnum == Integer.parseInt(msg.getData()[1])) {
                 p2 = players.get(i);
             }
         }
         if (p1.isOnline && p2.isOnline) {
             try {
-                outputMsg = (new Message("multiPlay", new String[]{Integer.toString(p1.id), Integer.toString(p2.id)}));
+                outputMsg = (new Message("multiPlay", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                 p1.output.writeObject(outputMsg);
                 p2.output.writeObject(outputMsg);
             } catch (IOException ex) {
@@ -207,7 +280,7 @@ public class Player extends Thread {
         int playersSize = players.size();
         Player player = null;
         for (int i = 0; i < playersSize; i++) {
-            if (players.get(i).id == id) {
+            if (players.get(i).idnum == id) {
                 player = players.get(i);
             }
         }

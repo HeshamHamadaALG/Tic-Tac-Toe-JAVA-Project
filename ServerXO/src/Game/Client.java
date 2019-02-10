@@ -66,7 +66,7 @@ class Client extends Thread {
         }
         for (int i = 0; i < playersLength; i++) {
             Player p = GameController.players.get(i);
-            if (p.id == id) {
+            if (p.idnum == id) {
                 p.socket = client.socket;
                 p.output = client.output;
                 p.input = client.input;

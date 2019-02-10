@@ -22,6 +22,7 @@ public class GameController extends Thread {
     static ArrayList<Player> players;
     static DBManger dbManger = null;
     ServerSocket listener;
+    Socket s;
 
     public GameController() {
         try {
@@ -33,19 +34,44 @@ public class GameController extends Thread {
         }
     }
 
+    @Override
     public void run() {
         while (true) {
             try {
                 System.out.println("Listening");
-                Socket s = new Socket();
+                s = new Socket();
                 s = listener.accept();
                 System.out.println("New Client Connected");
                 Client client = new Client(s,new ObjectInputStream(s.getInputStream()),new ObjectOutputStream(s.getOutputStream()));
                 client.start();
             } catch (IOException ex) {
-                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+
+                    //                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Server not listen");
             }
         }
     }
+
+    public void close() throws IOException{
+        s.close();
+        listener.close();
+    }
+    
+    public ServerSocket getListener() {
+        return listener;
+    }
+
+    public void setListener(ServerSocket listener) {
+        this.listener = listener;
+    }
+
+    public Socket getS() {
+        return s;
+    }
+
+    public void setS(Socket s) {
+        this.s = s;
+    }
+    
 
 }

@@ -76,5 +76,13 @@ public class DBManger {
          return players;
     }
 
- 
+ public Connection getConnect() {
+        return connect;
+    }
+    
+
+    public void setConnect(Connection connect) {
+        this.connect = connect;
+    }
+    
 }

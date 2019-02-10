@@ -42,8 +42,6 @@ public class ServerXO extends Application {
         });
         stage.setScene(scene);
         stage.show();
-        GameController gc = new  GameController();
-        gc.start();
     }
 
     /**

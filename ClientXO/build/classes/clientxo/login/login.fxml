@@ -37,7 +37,7 @@
                   <Image url="@../images/Untitled-2.png" />
                </image>
             </ImageView>
-            <Button layoutX="46.0" layoutY="274.0" mnemonicParsing="false" onAction="#GameAction" opacity="0.85" prefHeight="39.0" prefWidth="270.0" style="-fx-background-color: #ffffff; -fx-border-color: #4B568A; -fx-border-radius: 20;" text="LOGIN" textFill="#032a71">
+            <Button layoutX="46.0" layoutY="274.0" mnemonicParsing="false" onAction="#LoginButton" opacity="0.85" prefHeight="39.0" prefWidth="270.0" style="-fx-background-color: #ffffff; -fx-border-color: #4B568A; -fx-border-radius: 20;" text="LOGIN" textFill="#032a71">
                <font>
                   <Font size="18.0" />
                </font>

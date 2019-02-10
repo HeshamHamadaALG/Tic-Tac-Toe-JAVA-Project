@@ -16,7 +16,6 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 /**
  *
  * @author LapTop MarKet
@@ -108,6 +107,8 @@ public class Client extends Thread {
             new FXMLDocumentController().playTypeWindow();
             return true;
         }
+            Platform.runLater(() -> 
+            new FXMLDocumentController().alertLogin());
         return false;
     }
 
@@ -154,5 +155,4 @@ public class Client extends Thread {
         
        
     }
-
 }

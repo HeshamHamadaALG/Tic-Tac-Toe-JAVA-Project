@@ -11,14 +11,19 @@ import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import player.Player;
 
 
 /**
@@ -48,6 +53,23 @@ public class GameCoreController implements Initializable {
     int playCount = 2;
     @FXML
     Image xo;
+        
+@FXML
+    private TableColumn<Player, Integer> tblId;
+    @FXML
+    private TableColumn<Player, String> tblNames; 
+    @FXML
+    private TableColumn<Player, Integer> tblScore;
+    @FXML
+    private TableView<Player> tableScores;
+        
+    
+    public GameCoreController() {
+        this.tableScores = new TableView<>();
+        this.tblId = new TableColumn();
+        this.tblNames = new TableColumn();
+        this.tblScore = new TableColumn();
+    }
 
     
 @FXML
@@ -74,8 +96,8 @@ private void Btn1(ActionEvent e){
         ClientXO.client.sendMessage(new Message("Move 0 0",new String[]{Integer.toString(ClientXO.getId())})); 
         btn1.setDisable(true);
         System.out.println("Cell 1 clcicked");
-
 }
+
 @FXML
 private void Btn2(ActionEvent e){
         btn2 = (Button) e.getSource();
@@ -138,9 +160,33 @@ private void backAction(ActionEvent event) throws IOException{
     new FXMLDocumentController().playTypeWindow();
         System.out.println("Back Pressed");
 }
+   // The Observable List
+    ObservableList<Player> usersList = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+         // Database Connection
+//        Connection connect = database.getConnect();
+//        System.out.println("====> DataBase Connected <====");  
+//        try {
+//            ResultSet res = connect.createStatement().executeQuery("select * from players ;");
+//            while(res.next()){
+//                usersList.add(new Player(res.getInt("id"),res.getString("name"),res.getInt("points")));
+//                System.out.println("Id : " +  res.getInt("id") + "  Name : "  + res.getString("name") + "  Points : " + res.getInt("points"));
+//            }
+//                System.out.println("===> table Connected");
+//        } catch (SQLException ex) {
+//            System.out.println("===>  No table Connection");
+//            Logger.getLogger(serverxo.FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        
+//        //Initializing the columns 
+//        tblId.setCellValueFactory(new PropertyValueFactory<>("idnum"));
+//        tblNames.setCellValueFactory(new PropertyValueFactory<>("names"));
+//        tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
+//        tableScores.setItems(usersList);
+          tableScores.setItems(usersList);
+    }       
 }

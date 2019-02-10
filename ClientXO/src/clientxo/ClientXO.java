@@ -62,10 +62,11 @@ public class ClientXO extends Application {
         try {
             // TODO
             client = new Client(new Socket("localhost", 8901));
-           
             client.start();
+            System.out.println("Client Connect to Server");
         } catch (IOException ex) {
-            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Client => No Connect ");
+//            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         

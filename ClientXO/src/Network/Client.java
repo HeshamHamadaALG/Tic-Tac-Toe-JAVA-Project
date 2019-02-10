@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -77,11 +78,13 @@ public class Client extends Thread {
             new FXMLDocumentController().playTypeWindow();
             return true;
         }
+            Platform.runLater(() -> 
+            new FXMLDocumentController().alertLogin());
         return false;
     }
-    
+
     public void multiPlay (){
       new FXMLDocumentController().gameWindow();
     }
-
+    
 }

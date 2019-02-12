@@ -63,6 +63,7 @@ public class Client extends Thread {
                 else if( msg.getType().equals("Hello"))
                     System.out.println("Hello");
                 //end
+                //recieve the mesg and redirect 
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {

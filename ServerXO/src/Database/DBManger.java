@@ -59,6 +59,22 @@ public class DBManger {
         }
         return -1;
     }
+    public boolean signUp(String name, String password,String email) {
+        try {
+            //check email and  username
+            statement = connect.createStatement();
+            String queryst = new String("insert into players (name,password,email) values( '"+name+"', '"+password+"','"+email+"') ;");
+            resultSet = statement.executeQuery(queryst);
+            statement.executeUpdate(queryst);
+            
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        
+    }
+    
     
     public ArrayList<Player> loadPlayer (){
         ArrayList<Player> players = new ArrayList<Player>();

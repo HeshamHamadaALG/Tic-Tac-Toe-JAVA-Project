@@ -29,6 +29,7 @@ class Client extends Thread {
 
     public void run() {
         int isLogin = -1;
+        boolean isSignup=false;
         while (isLogin == -1) {
             try {
                 Message msg = (Message) input.readObject();
@@ -37,12 +38,17 @@ class Client extends Thread {
                 if ("Login".equals(msg.getType())) {
                     isLogin = GameController.dbManger.login(msg.getData()[0], msg.getData()[1]);
                 }
+                if ("Signup".equals(msg.getType())) {
+                    isSignup = GameController.dbManger.signUp(msg.getData()[0], msg.getData()[1], msg.getData()[2]);
+                }
+                System.out.println("signup Result:" + isSignup);
                 System.out.println("Login Result:" + isLogin);
                 if (isLogin != -1) {
                     makePlayerOnline(this, isLogin);
                 } else {
                     output.writeObject(new Message("Login", new String[]{"Wrong"}));
                 }
+                //check ifsignp true sebd mesg to client to redirect to login
                 System.out.println(msg.getType());
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());

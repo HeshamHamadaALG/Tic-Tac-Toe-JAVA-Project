@@ -31,6 +31,7 @@ class Client extends Thread {
         int isLogin = -1;
         while (isLogin == -1) {
             try {
+                
                 Message msg = (Message) input.readObject();
                 System.out.println(msg.getType());
                 System.out.println(msg.getData()[0] + " " + msg.getData()[1]);

@@ -62,7 +62,6 @@ public class ClientXO extends Application {
         try {
             // TODO
             client = new Client(new Socket("localhost", 8901));
-           
             client.start();
         } catch (IOException ex) {
             Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);

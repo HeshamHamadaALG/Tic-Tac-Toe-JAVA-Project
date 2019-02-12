@@ -11,6 +11,7 @@ import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,6 +42,31 @@ public class playTypeController implements Initializable {
     private double x = 0; 
     private double y = 0;
     
+//public playTypeController(){
+//            Platform.runLater(() -> {
+//            try {
+//                Parent SingleView = FXMLLoader.load(getClass().getResource("./playType.fxml"));
+//                Scene SingleScene = new Scene(SingleView);
+//                Stage singlewindow = ClientXO.getGlobalStage();
+//
+//                // to make the stage movable
+//                SingleView.setOnMousePressed((MouseEvent e) -> {
+//                    x = e.getSceneX();
+//                    y = e.getSceneY();
+//                });
+//                SingleView.setOnMouseDragged((MouseEvent e) -> {
+//                    singlewindow.setX(e.getScreenX() - x);
+//                    singlewindow.setY(e.getScreenY() - y);
+//                });
+//
+//                singlewindow.setScene(SingleScene);
+//                singlewindow.show();
+//            } catch (IOException ex) {
+//                System.out.println("error");
+//                //Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        });
+//}
 
 @FXML
 private void closeButtonAction(){
@@ -81,10 +107,9 @@ private void backAction(ActionEvent event) throws IOException{
     new FXMLDocumentController().mainWindow();
         System.out.println("Back Pressed");
 }
-    
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }    
     
 }

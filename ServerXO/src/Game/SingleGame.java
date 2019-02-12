@@ -14,10 +14,9 @@ import SinglePlayer.Board;
 public class SingleGame extends Game{
     AI Computer ;
     
-    public int[] Turn (){
+    public int[] computerTurn (){
          int move [] ;
          move = Computer.getMove(new Board(board),noOfTurns);
-         board[move[0]][move[1]]='O';
        return move;
     }
              

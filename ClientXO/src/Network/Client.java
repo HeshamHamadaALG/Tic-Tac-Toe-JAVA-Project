@@ -7,10 +7,15 @@ package Network;
 
 import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
+import clientxo.playerForm.playTypeController;
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -21,7 +26,8 @@ public class Client extends Thread {
     Socket socket;
     ObjectInputStream input;
     ObjectOutputStream output;
-    
+    FXMLDocumentController gameController = null;
+
     public Client(Socket socket, ObjectInputStream input, ObjectOutputStream output) {
         this.socket = socket;
         this.input = input;
@@ -32,7 +38,6 @@ public class Client extends Thread {
         this.socket = socket;
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
-
     }
 
     public void sendMessage(Message msg) {
@@ -54,13 +59,32 @@ public class Client extends Thread {
                     System.out.println(msg.getData()[0]);
                     isLogged = handleLogin(msg);
                 }
-                //sara
                 else if (msg.getType().equals("multiPlay")) {
                     multiPlay();
-                     System.out.println(msg.getType());
+                    System.out.println(msg.getType());
+                } else if (msg.getType().equals("StartEasyGame")) {
+                    new FXMLDocumentController().gameWindow();;
+                }else if (msg.getType().equals("StartMediumGame")) {
+                    new FXMLDocumentController().gameWindow();;
+                }else if (msg.getType().equals("StartHardGame")) {
+                    new FXMLDocumentController().gameWindow();;
                 }
-                else if( msg.getType().equals("Hello"))
-                    System.out.println("Hello");
+                else if (msg.getType().startsWith("Move")) {
+                    handleMove(msg.getType());
+                }
+                else if (msg.getType().startsWith("WIN")) {
+                    System.out.println("CONGRATS, YOU WIN");
+                     new FXMLDocumentController().singlePlayWindow();
+                }
+                else if (msg.getType().startsWith("LOSE")) {
+                    System.out.println("YOU LOSE");
+                     new FXMLDocumentController().singlePlayWindow();
+                }
+                else if (msg.getType().equals("DRAW")) {
+                    System.out.println("DRAW");
+                     new FXMLDocumentController().singlePlayWindow();
+                }
+
                 //end
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,7 +92,7 @@ public class Client extends Thread {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-       
+
     }
 
     public boolean handleLogin(Message msg) {
@@ -79,9 +103,43 @@ public class Client extends Thread {
         }
         return false;
     }
-    
-    public void multiPlay (){
-      new FXMLDocumentController().gameWindow();
+
+    public void handleMove(String move) {
+        System.out.println(move);
+        Platform.runLater(() -> {
+            char T = move.charAt(5);
+            ImageView Turn = new ImageView(new Image(getClass().getResourceAsStream(T + ".png")));
+            int col = Integer.parseInt(move.charAt(7) + "");
+            int row = Integer.parseInt(move.charAt(9) + "");
+            String btnId = "";
+            if (col == 0 && row == 0) {
+                btnId = "1";
+            } else if (col == 1 && row == 0) {
+                btnId = "2";
+            } else if (col == 2 && row == 0) {
+                btnId = "3";
+            } else if (col == 0 && row == 1) {
+                btnId = "4";
+            } else if (col == 1 && row == 1) {
+                btnId = "5";
+            } else if (col == 2 && row == 1) {
+                btnId = "6";
+            } else if (col == 0 && row == 2) {
+                btnId = "7";
+            } else if (col == 1 && row == 2) {
+                btnId = "8";
+            } else if (col == 2 && row == 2) {
+                btnId = "9";
+            }
+            Button btn = (Button) ClientXO.getGlobalStage().getScene().lookup("#btn" + btnId);
+            btn.setGraphic(Turn);
+//               gameController.crController.turn(turn,col,row);
+        });
+
+    }
+
+    public void multiPlay() {
+        new FXMLDocumentController().gameWindow();
     }
 
 }

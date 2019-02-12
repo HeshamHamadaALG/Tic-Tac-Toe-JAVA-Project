@@ -5,6 +5,7 @@
  */
 package clientxo;
 
+import clientxo.playerForm.playTypeController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,7 +37,8 @@ public class FXMLDocumentController implements Initializable {
 
     private double x = 0;
     private double y = 0;
-
+    public  playTypeController ptController;
+//    public  GameCoreController crController;
     @FXML
     private void closeButtonAction() {
 
@@ -207,10 +209,11 @@ Switching Scenes
     public void playTypeWindow() {
         Platform.runLater(() -> {
             try {
-                Parent SingleView = FXMLLoader.load(getClass().getResource("./playerForm/playType.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("./playerForm/playType.fxml"));
+                Parent SingleView = loader.load();
                 Scene SingleScene = new Scene(SingleView);
                 Stage singlewindow = ClientXO.getGlobalStage();
-
+                ptController = (playTypeController) loader.getController();
                 // to make the stage movable
                 SingleView.setOnMousePressed((MouseEvent e) -> {
                     x = e.getSceneX();

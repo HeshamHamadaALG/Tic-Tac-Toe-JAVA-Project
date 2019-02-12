@@ -35,7 +35,7 @@ public class DBManger {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connect = DriverManager
-                    .getConnection("jdbc:mysql://localhost/tiktok?"
+                    .getConnection("jdbc:mysql://localhost/tictactoe?"
                             + "user=root&password=");
             return true;
 

@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/playerForm/playTypeController.java</file>
             <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/game/GameCoreController.java</file>
             <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/Network/Client.java</file>
@@ -12,6 +13,11 @@
             <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/ClientXO.java</file>
             <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/FXMLDocumentController.java</file>
             <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/game/GameCore.fxml</file>
+=======
+            <file>file:/E:/ITI/java/Tic-Tac-Toe-JAVA-Project-master/ClientXO/src/Network/Client.java</file>
+            <file>file:/E:/ITI/java/Tic-Tac-Toe-JAVA-Project-master/ClientXO/src/clientxo/playerForm/playTypeController.java</file>
+            <file>file:/E:/ITI/java/Tic-Tac-Toe-JAVA-Project-master/ClientXO/src/clientxo/ClientXO.java</file>
+>>>>>>> 4cc0cc875d78b2aa93ef8fdb6c2f3771db346dee
         </group>
     </open-files>
 </project-private>

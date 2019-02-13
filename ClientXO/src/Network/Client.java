@@ -51,17 +51,24 @@ public class Client extends Thread {
     public void run() {
         Message msg = null;
         boolean isLogged = false;
+        
         //sara change !isLogged to true
         while (true) {
             try {
                 msg = (Message) input.readObject();
+                System.out.println(msg.getType());
                 if (msg.getType().equals("Login")) {
                     System.out.println(msg.getData()[0]);
                     isLogged = handleLogin(msg);
                 }
-                else if (msg.getType().equals("multiPlay")) {
-                    multiPlay();
-                    System.out.println(msg.getType());
+                //sara
+                else if (msg.getType().equals("playRequest")){
+                    Message message= (new Message("playRequest", new String[]{"accept",msg.getData()[0], msg.getData()[1]}));
+                     ClientXO.client.sendMessage(message);
+                    //playRequest();
+                }
+                else if (msg.getType().equals("play")) {
+                        multiPlay();
                 } else if (msg.getType().equals("StartEasyGame")) {
                     new FXMLDocumentController().gameWindow();;
                 }else if (msg.getType().equals("StartMediumGame")) {
@@ -140,6 +147,12 @@ public class Client extends Thread {
 
     public void multiPlay() {
         new FXMLDocumentController().gameWindow();
+    }
+    
+    public void playRequest(){
+        // show pop up to ask user if he wants to play, if he click OK, the client will send a message of type playRequest, and accept data
+        
+       
     }
 
 }

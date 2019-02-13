@@ -56,17 +56,35 @@ public class Player extends Thread {
 
     public void run() {
         try {
-            //sara
-
-            //end
             while (true) {
                 System.out.println("Listening Player");
                 Message msg = (Message) input.readObject();
+                Player p1 = null;
+                Player p2 = null;
+                Message outputMsg = null;
                 //Sara
-
                 System.out.println(msg.getType());
                 if (msg.getType().equals("multiPlay")) {
-                    handleMultiplayer(msg);
+                       System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
+                       p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+                       p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                        if (p2.isOnline) {
+                            Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.id), Integer.toString(p2.id)}));
+                            p2.output.writeObject(playRequest);
+                        }
+                } else if (msg.getType().equals("playRequest")) {
+                    if (msg.getData()[0].equals("accept")) {
+                        p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                        p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
+                        if (p1.isOnline && p2.isOnline) {
+                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.id), Integer.toString(p2.id)}));
+                            p1.output.writeObject(outputMsg);
+                            p2.output.writeObject(outputMsg);
+                        }
+                    } else {
+                        Message rejected = (new Message("reject", new String[]{Integer.toString(p1.id), Integer.toString(p2.id)}));
+                        p1.output.writeObject(rejected);
+                    }
                 }
                 if (msg.getType().equals("EasySingle")) {
                     Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
@@ -89,6 +107,7 @@ public class Player extends Thread {
                 if (msg.getType().startsWith("Move")) {
                     handleMove(msg);
                 }
+              
                 //end
 
             }

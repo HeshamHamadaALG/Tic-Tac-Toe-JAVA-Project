@@ -156,10 +156,10 @@ Switching Scenes
     }
 
     // Game Scene 
-    public void multiPlayWindow() {
+    public void listWindow() {
         Platform.runLater(() -> {
             try {
-                Parent multiView = FXMLLoader.load(getClass().getResource("./game/GameCore.fxml"));
+                Parent multiView = FXMLLoader.load(getClass().getResource("./list/list.fxml"));
                 Scene multiScene = new Scene(multiView);
                 Stage multiwindow = ClientXO.getGlobalStage();
 
@@ -233,6 +233,35 @@ Switching Scenes
             }
         });
     }
+       
+    // Multi Scene
+        public void multiGameWindow() {
+        Platform.runLater(() -> {
+            try {
+                System.out.println("LOading MULTIGAME");
+                Parent MultiView = FXMLLoader.load(getClass().getResource("./multigame/MultiGame.fxml"));
+                Scene MultiScene = new Scene(MultiView);
+                Stage Multiwindow = ClientXO.getGlobalStage();
+
+                // to make the stage movable
+                MultiView.setOnMousePressed((MouseEvent e) -> {
+                    x = e.getSceneX();
+                    y = e.getSceneY();
+                });
+                MultiView.setOnMouseDragged((MouseEvent e) -> {
+                    Multiwindow.setX(e.getScreenX() - x);
+                    Multiwindow.setY(e.getScreenY() - y);
+                });
+
+                Multiwindow.setScene(MultiScene);
+                Multiwindow.show();
+            } catch (IOException ex) {
+                System.out.println("I can't Load Window");
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
+
 
     // Main Scene 
     public void mainWindow() {

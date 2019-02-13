@@ -27,7 +27,7 @@ public class Client extends Thread {
     ObjectInputStream input;
     ObjectOutputStream output;
     FXMLDocumentController gameController = null;
-
+    
     public Client(Socket socket, ObjectInputStream input, ObjectOutputStream output) {
         this.socket = socket;
         this.input = input;
@@ -148,11 +148,14 @@ public class Client extends Thread {
     }
 
     public void multiPlay() {
-        new FXMLDocumentController().gameWindow();
+        System.out.println("You choose Multi = Before");
+        new FXMLDocumentController().listWindow();
+        System.out.println("You choose Multi = After");
     }
 
     public void playRequest() {
         // show pop up to ask user if he wants to play, if he click OK, the client will send a message of type playRequest, and accept data
 
     }
+
 }

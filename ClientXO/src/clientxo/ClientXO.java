@@ -6,11 +6,8 @@
 package clientxo;
 
 import Network.Client;
-import clientxo.login.loginController;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,7 +36,7 @@ public class ClientXO extends Application {
     public static void setId(int id) {
         ClientXO.id = id;
     }
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
@@ -68,8 +65,6 @@ public class ClientXO extends Application {
             System.out.println("Client => No Connect ");
 //            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
 
     }
 

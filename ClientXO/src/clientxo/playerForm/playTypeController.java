@@ -94,10 +94,10 @@ private void SingleButtonAction(ActionEvent event) throws IOException{
 @FXML
 private void MultiButtonAction(ActionEvent event) throws IOException{
    
-        System.out.println("Multi Player Pressed");
         //sara 
          Message msg = new Message("multiPlay",new String []{Integer.toString(ClientXO.getId()),"2"});
          ClientXO.client.sendMessage(msg);
+         System.out.println("Multi Player Pressed");
          
          //end
 }

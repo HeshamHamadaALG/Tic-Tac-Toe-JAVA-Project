@@ -63,7 +63,7 @@ public class Client extends Thread {
                 }
                 //sara
                 else if (msg.getType().equals("playRequest")){
-                    Message message= (new Message("playRequest", new String[]{"accept",msg.getData()[0], msg.getData()[1]}));
+                     Message message= (new Message("playRequest", new String[]{"accept",msg.getData()[0], msg.getData()[1]}));
                      ClientXO.client.sendMessage(message);
                     //playRequest();
                 }

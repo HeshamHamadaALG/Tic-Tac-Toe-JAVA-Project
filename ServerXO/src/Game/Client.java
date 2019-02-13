@@ -33,6 +33,10 @@ class Client extends Thread {
             try {
                 
                 Message msg = (Message) input.readObject();
+                if (msg == null) {
+                    System.out.println("client is offline");
+                    return;
+                }
                 System.out.println(msg.getType());
                 System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
                 if ("Login".equals(msg.getType())) {
@@ -46,7 +50,8 @@ class Client extends Thread {
                 }
                 System.out.println(msg.getType());
             } catch (IOException ex) {
-                System.out.println(ex.getMessage());
+                 System.out.println("client is offline");
+                 return;
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }

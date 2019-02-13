@@ -16,6 +16,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 /**
  *
  * @author LapTop MarKet
@@ -50,52 +51,52 @@ public class Client extends Thread {
     public void run() {
         Message msg = null;
         boolean isLogged = false;
-        
+
         //sara change !isLogged to true
         while (true) {
             try {
                 msg = (Message) input.readObject();
+                if (msg == null) {
+                    System.out.println("server is offline");
+                    return;
+                }
                 System.out.println(msg.getType());
                 if (msg.getType().equals("Login")) {
                     System.out.println(msg.getData()[0]);
                     isLogged = handleLogin(msg);
-                }
-                //sara
-                else if (msg.getType().equals("playRequest")){
-                     Message message= (new Message("playRequest", new String[]{"accept",msg.getData()[0], msg.getData()[1]}));
-                     ClientXO.client.sendMessage(message);
+                } //sara
+                else if (msg.getType().equals("playRequest")) {
+                    Message message = (new Message("playRequest", new String[]{"accept", msg.getData()[0], msg.getData()[1]}));
+                    ClientXO.client.sendMessage(message);
                     //playRequest();
-                }
-                else if (msg.getType().equals("play")) {
-                        multiPlay();
+                } else if (msg.getType().equals("play")) {
+                    multiPlay();
                 } else if (msg.getType().equals("StartEasyGame")) {
                     new FXMLDocumentController().gameWindow();;
-                }else if (msg.getType().equals("StartMediumGame")) {
+                } else if (msg.getType().equals("StartMediumGame")) {
                     new FXMLDocumentController().gameWindow();;
-                }else if (msg.getType().equals("StartHardGame")) {
+                } else if (msg.getType().equals("StartHardGame")) {
                     new FXMLDocumentController().gameWindow();;
-                }
-                else if (msg.getType().startsWith("Move")) {
+                } else if (msg.getType().startsWith("Move")) {
                     handleMove(msg.getType());
-                }
-                else if (msg.getType().startsWith("WIN")) {
+                } else if (msg.getType().startsWith("WIN")) {
                     System.out.println("CONGRATS, YOU WIN");
-                     new FXMLDocumentController().singlePlayWindow();
-                }
-                else if (msg.getType().startsWith("LOSE")) {
+                    new FXMLDocumentController().singlePlayWindow();
+                } else if (msg.getType().startsWith("LOSE")) {
                     System.out.println("YOU LOSE");
-                     new FXMLDocumentController().singlePlayWindow();
-                }
-                else if (msg.getType().equals("DRAW")) {
+                    new FXMLDocumentController().singlePlayWindow();
+                } else if (msg.getType().equals("DRAW")) {
                     System.out.println("DRAW");
-                     new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().singlePlayWindow();
                 }
 
                 //end
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                      System.out.println("server is offline");
+                    return;
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -107,8 +108,8 @@ public class Client extends Thread {
             new FXMLDocumentController().playTypeWindow();
             return true;
         }
-            Platform.runLater(() -> 
-            new FXMLDocumentController().alertLogin());
+        Platform.runLater(()
+                -> new FXMLDocumentController().alertLogin());
         return false;
     }
 
@@ -149,10 +150,9 @@ public class Client extends Thread {
     public void multiPlay() {
         new FXMLDocumentController().gameWindow();
     }
-    
-    public void playRequest(){
+
+    public void playRequest() {
         // show pop up to ask user if he wants to play, if he click OK, the client will send a message of type playRequest, and accept data
-        
-       
+
     }
 }

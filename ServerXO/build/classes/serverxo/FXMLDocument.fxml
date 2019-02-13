@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="634.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverxo.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="580.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverxo.FXMLDocumentController">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
       <Button fx:id="closeBtn" layoutX="864.0" mnemonicParsing="false" onAction="#closeButtonAction" opacity="0.81" prefHeight="26.0" prefWidth="36.0" style="-fx-background-color: #9C0707; -fx-border-radius: 0;" text="X" textFill="WHITE">
@@ -26,12 +26,11 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <TableView fx:id="tableScores" layoutX="492.0" layoutY="41.0" prefHeight="582.0" prefWidth="394.0">
+      <TableView fx:id="tableScores" layoutX="492.0" layoutY="41.0" prefHeight="530.0" prefWidth="394.0">
          <columns>
-            <TableColumn fx:id="tblId" editable="false" prefWidth="47.200042724609375" text="ID" />
-            <TableColumn fx:id="tblNames" editable="false" prefWidth="167.20001220703125" text="Name" />
-            <TableColumn fx:id="tblScore" prefWidth="105.60003662109375" text="Score" />
-            <TableColumn prefWidth="72.7999267578125" text="On/Off" />
+            <TableColumn fx:id="tblNames" editable="false" prefWidth="191.20004272460938" text="Names" />
+            <TableColumn fx:id="tblScore" editable="false" prefWidth="113.59991455078125" text="Score" />
+            <TableColumn prefWidth="88.0" text="On/Off" />
          </columns>
       </TableView>
       <ImageView fitHeight="150.0" fitWidth="402.0" layoutX="45.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
@@ -39,7 +38,7 @@
             <Image url="@../image/Untitled-2.png" />
          </image>
       </ImageView>
-      <Button fx:id="btn" layoutX="103.0" layoutY="151.0" mnemonicParsing="false" onAction="#ServerAction" prefHeight="238.0" prefWidth="286.0" style="-fx-background-color: #f4f4f4;">
+      <Button fx:id="btn" layoutX="103.0" layoutY="225.0" mnemonicParsing="false" onAction="#ServerAction" prefHeight="238.0" prefWidth="286.0" style="-fx-background-color: #f4f4f4;">
     <!--  <graphic>
         <ImageView fitHeight="238.0" fitWidth="286.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -48,6 +47,5 @@
         </ImageView>
       </graphic> -->
       </Button>
-      <Button fx:id="funBic" layoutX="14.0" layoutY="415.0" mnemonicParsing="false" prefHeight="204.0" prefWidth="466.0" style="-fx-background-color: #f4f4f4;" />
     </children>
 </AnchorPane>

@@ -17,12 +17,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *
@@ -253,15 +251,6 @@ Switching Scenes
         } catch (IOException ex) {
             //Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    public void alertLogin(){
-           Alert alert = new Alert(Alert.AlertType.INFORMATION);
-           alert.initStyle(StageStyle.UNDECORATED);
-           alert.setTitle("Login Alert !!");
-           alert.setHeaderText(null);
-           alert.setContentText("You Entered Wronge UserName Or Password  !!");
-           alert.showAndWait();
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 
 /**
  *
@@ -47,6 +46,7 @@ public class Client extends Thread {
     public void run() {
         Message msg = null;
         boolean isLogged = false;
+        
         //sara change !isLogged to true
         while (true) {
             try {
@@ -56,7 +56,13 @@ public class Client extends Thread {
                     isLogged = handleLogin(msg);
                 }
                 //sara
-                else if (msg.getType().equals("multiPlay")) {
+                else if (msg.getType().equals("playRequest")){
+                    Message message= (new Message("playRequest", new String[]{"accept",msg.getData()[0], msg.getData()[1]}));
+                   
+                     ClientXO.client.sendMessage(message);
+                    //playRequest();
+                }
+                else if (msg.getType().equals("play")) {
                     multiPlay();
                      System.out.println(msg.getType());
                 }
@@ -79,13 +85,17 @@ public class Client extends Thread {
             new FXMLDocumentController().playTypeWindow();
             return true;
         }
-            Platform.runLater(() -> 
-            new FXMLDocumentController().alertLogin());
         return false;
     }
-
+    
     public void multiPlay (){
       new FXMLDocumentController().gameWindow();
     }
     
+    public void playRequest(){
+        // show pop up to ask user if he wants to play, if he click OK, the client will send a message of type playRequest, and accept data
+        
+       
+    }
+
 }

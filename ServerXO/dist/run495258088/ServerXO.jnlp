@@ -1,3 +1,4 @@
+<<<<<<< HEAD:ServerXO/dist/run495258088/ServerXO.jnlp
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="ServerXO.jnlp">
   <information>
@@ -17,3 +18,24 @@
   <jfx:javafx-desc  width="800" height="600" main-class="serverxo.ServerXO"  name="ServerXO" />
   <update check="always"/>
 </jnlp>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="ServerXO.jnlp">
+  <information>
+    <title>ServerXO</title>
+    <vendor>EgyJuba</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="ServerXO.jar" size="190934" download="eager" />
+    <jar href="lib/mysql-connector-java-5.1.23-bin.jar" size="834126" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="ServerXO" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="serverxo.ServerXO"  name="ServerXO" />
+  <update check="always"/>
+</jnlp>
+>>>>>>> 4cc0cc875d78b2aa93ef8fdb6c2f3771db346dee:ServerXO/dist/run2275017/ServerXO.jnlp

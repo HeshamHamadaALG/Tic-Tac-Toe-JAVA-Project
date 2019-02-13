@@ -5,26 +5,14 @@
  */
 package serverxo;
 
-import Database.DBManger;
-import Game.GameController;
-import Game.Player;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -44,70 +32,35 @@ public class FXMLDocumentController implements Initializable {
     Image onOff;
     @FXML
     String state;
-    @FXML
-    Button funBic;
     
     @FXML 
     private Button closeBtn, minBtn;
     
-    @FXML
-    private TableColumn<Player, Integer> tblId;
-    @FXML
-    private TableColumn<Player, String> tblNames; 
-    @FXML
-    private TableColumn<Player, Integer> tblScore;
-    @FXML
-    private TableView<Player> tableScores;
-    @FXML
-    Image imgPlace;
-    DBManger db = new DBManger();
-    GameController gc;
-    
-    ObservableList<Player> usersList = FXCollections.observableArrayList();
-    
-    public FXMLDocumentController() {
-        this.tableScores = new TableView<>();
-        this.tblId = new TableColumn();
-        this.tblNames = new TableColumn();
-        this.tblScore = new TableColumn();
-    }
-    
+//    @FXML
+//    private TableColumn<, String> tblNames, tblScore;
+//    @FXML
+//    private TableView<> tableScores;
 
     
 @FXML
-public Image Count() throws IOException{
+public Image Count(){
             
-         if((Count % 2)==0){
+        if((Count % 2)==0){
             onOff = new Image(getClass().getResourceAsStream("on.png"));
             state = "on";
-            imgPlace = new Image(getClass().getResourceAsStream("/image/running.png"));
-            // start server
-            gc = new GameController();
-            gc.start();
-            
-            // Start Table
-            tableScores.setItems(usersList);
         } else {
             onOff = new Image(getClass().getResourceAsStream("off.png"));
             state = "off";
-            imgPlace = new Image(getClass().getResourceAsStream("/image/sleep.png"));
-            // stop server
-            gc.close();
-            
-            // Stop Table
-            tableScores.setItems(null);
         }
         return onOff;
         }
 
 
 @FXML
-private void closeButtonAction() throws IOException{
+private void closeButtonAction(){
         
         // Close Window Button
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
-        // stop server
-          gc.close();
         closeStage.close();    
 }
 @FXML
@@ -120,42 +73,17 @@ private void minButtonAction(){
 
     
     @FXML
-    public void ServerAction(ActionEvent e) throws IOException {
+    public void ServerAction(ActionEvent e) {
         btn = (Button) e.getSource();
         btn.setGraphic(new ImageView(Count()));
-        funBic.setGraphic(new ImageView(imgPlace));
+
         Count++;
     }
-        
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         btn.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("off.png"))));
-        // Funn Server Pics
-         funBic.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/image/sleep.png"))));
-
-        
-        // Database Connection
-        Connection con = db.getConnect();
-        System.out.println("====> DataBase Connected <====");  
-        try {
-            ResultSet rs = con.createStatement().executeQuery("select * from players ;");
-            while(rs.next()){
-                usersList.add(new Player(rs.getInt("id"),rs.getString("name"),rs.getInt("points")));
-                System.out.println("Id : " +  rs.getInt("id") + "  Name : "  + rs.getString("name") + "  Points : " + rs.getInt("points"));
-            }
-                System.out.println("===> table Connected");
-        } catch (SQLException ex) {
-            System.out.println("===>  No table Connection");
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        
-        //Initializing the columns 
-        tblId.setCellValueFactory(new PropertyValueFactory<>("idnum"));
-        tblNames.setCellValueFactory(new PropertyValueFactory<>("names"));
-        tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
-         
-    }  
-
+    }    
+    
 }

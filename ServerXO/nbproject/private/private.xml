@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
@@ -6,3 +7,16 @@
         <group name="Group 20190210-06:03:55"/>
     </open-files>
 </project-private>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/E:/ITI/java/Tic-Tac-Toe-JAVA-Project-master/ServerXO/src/serverxo/ServerXO.java</file>
+            <file>file:/E:/ITI/java/Tic-Tac-Toe-JAVA-Project-master/ServerXO/src/Game/Player.java</file>
+            <file>file:/E:/ITI/java/Tic-Tac-Toe-JAVA-Project-master/ServerXO/src/Game/Client.java</file>
+        </group>
+    </open-files>
+</project-private>
+>>>>>>> 4cc0cc875d78b2aa93ef8fdb6c2f3771db346dee

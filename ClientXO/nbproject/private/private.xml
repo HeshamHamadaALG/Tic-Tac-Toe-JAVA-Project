@@ -3,15 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/playerForm/playTypeController.java</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/game/GameCoreController.java</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/Network/Client.java</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/levels/levels.fxml</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/playerForm/playType.fxml</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/levels/levelsController.java</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/ClientXO.java</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/FXMLDocumentController.java</file>
-            <file>file:/C:/Users/LapTop%20MarKet/Documents/NetBeansProjects/Java%20Project/ClientXO/src/clientxo/FXMLDocument.fxml</file>
+            <file>file:/E:/ITI/JavaLabs/TicTacToeProject/last%20commit/ClientXO/src/clientxo/ClientXO.java</file>
+            <file>file:/E:/ITI/JavaLabs/TicTacToeProject/last%20commit/ClientXO/src/clientxo/FXMLDocumentController.java</file>
+            <file>file:/E:/ITI/JavaLabs/TicTacToeProject/last%20commit/ClientXO/src/Network/Client.java</file>
+            <file>file:/E:/ITI/JavaLabs/TicTacToeProject/last%20commit/ClientXO/src/clientxo/multigame/MultiGame.fxml</file>
+            <file>file:/E:/ITI/JavaLabs/TicTacToeProject/last%20commit/ClientXO/src/clientxo/multigame/MultiGameController.java</file>
         </group>
     </open-files>
 </project-private>

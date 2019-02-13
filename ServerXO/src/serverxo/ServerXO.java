@@ -5,8 +5,6 @@
  */
 package serverxo;
 
-import Database.DBManger;
-import Game.GameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

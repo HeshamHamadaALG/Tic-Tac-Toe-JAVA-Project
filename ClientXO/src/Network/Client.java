@@ -10,12 +10,18 @@ import clientxo.FXMLDocumentController;
 import clientxo.playerForm.playTypeController;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import player.Player;
 
 /**
  *
@@ -27,7 +33,7 @@ public class Client extends Thread {
     ObjectInputStream input;
     ObjectOutputStream output;
     FXMLDocumentController gameController = null;
-
+    
     public Client(Socket socket, ObjectInputStream input, ObjectOutputStream output) {
         this.socket = socket;
         this.input = input;
@@ -89,6 +95,10 @@ public class Client extends Thread {
                     System.out.println("DRAW");
                     new FXMLDocumentController().singlePlayWindow();
                 }
+                else if(msg.getType().equals("listResponse")){
+                    System.out.println("ListPlayerReply");
+                    fillPlayerList(msg.getData());
+                }
 
                 //end
             } catch (ClassNotFoundException ex) {
@@ -148,11 +158,40 @@ public class Client extends Thread {
     }
 
     public void multiPlay() {
-        new FXMLDocumentController().gameWindow();
+        System.out.println("You choose Multi = Before");
+        new FXMLDocumentController().listWindow();
+        System.out.println("You choose Multi = After");
     }
 
+    public void fillPlayerList (String [] players){
+        Platform.runLater(()->{
+            ObservableList<Player> playerList = ArrayToPlayerList(players);
+            TableView<Player> playerTable =  (TableView<Player>) ClientXO.getGlobalStage().getScene().lookup("#tableScores");
+            if(playerTable!=null){
+                System.out.println("FILL THE TABLE");
+                  playerTable.setItems(playerList);
+            }
+        });
+    }
+    //unimport stringTokenizier
+    public ObservableList<Player>  ArrayToPlayerList(String [] players){
+        ObservableList<Player> playerList = FXCollections.observableArrayList();
+        System.out.println("ARRTOPLAYERLIST");
+        for(int i=0;i<players.length;i++){
+            StringTokenizer st = new StringTokenizer(players[i],"/");  
+            Player p = new Player();
+            p.setIdnum(Integer.parseInt(st.nextToken()));
+            p.setNames(st.nextToken());
+            p.setPoints(Integer.parseInt(st.nextToken()));
+//            p.setIsOnline(Boolean.valueOf(st.nextToken()));
+            playerList.add(p);
+            System.out.println(p.getIdnum()+ " " + p.getNames()+" "+p.getPoints()+" "+p.isIsOnline());  
+        }
+        return playerList;
+    }
     public void playRequest() {
         // show pop up to ask user if he wants to play, if he click OK, the client will send a message of type playRequest, and accept data
 
     }
+
 }

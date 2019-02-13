@@ -5,6 +5,7 @@
  */
 package clientxo.game;
 
+import Network.Client;
 import Network.Message;
 import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
@@ -54,22 +55,6 @@ public class GameCoreController implements Initializable {
     @FXML
     Image xo;
         
-@FXML
-    private TableColumn<Player, Integer> tblId;
-    @FXML
-    private TableColumn<Player, String> tblNames; 
-    @FXML
-    private TableColumn<Player, Integer> tblScore;
-    @FXML
-    private TableView<Player> tableScores;
-        
-    
-    public GameCoreController() {
-        this.tableScores = new TableView<>();
-        this.tblId = new TableColumn();
-        this.tblNames = new TableColumn();
-        this.tblScore = new TableColumn();
-    }
 
     
 @FXML
@@ -155,38 +140,16 @@ private void Btn9(ActionEvent e){
         System.out.println("Cell 9 clcicked");
 }
 
+
 @FXML
 private void backAction(ActionEvent event) throws IOException{
     new FXMLDocumentController().playTypeWindow();
         System.out.println("Back Pressed");
 }
-   // The Observable List
-    ObservableList<Player> usersList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-         // Database Connection
-//        Connection connect = database.getConnect();
-//        System.out.println("====> DataBase Connected <====");  
-//        try {
-//            ResultSet res = connect.createStatement().executeQuery("select * from players ;");
-//            while(res.next()){
-//                usersList.add(new Player(res.getInt("id"),res.getString("name"),res.getInt("points")));
-//                System.out.println("Id : " +  res.getInt("id") + "  Name : "  + res.getString("name") + "  Points : " + res.getInt("points"));
-//            }
-//                System.out.println("===> table Connected");
-//        } catch (SQLException ex) {
-//            System.out.println("===>  No table Connection");
-//            Logger.getLogger(serverxo.FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        
-//        //Initializing the columns 
-//        tblId.setCellValueFactory(new PropertyValueFactory<>("idnum"));
-//        tblNames.setCellValueFactory(new PropertyValueFactory<>("names"));
-//        tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
-//        tableScores.setItems(usersList);
-          tableScores.setItems(usersList);
+
     }       
 }

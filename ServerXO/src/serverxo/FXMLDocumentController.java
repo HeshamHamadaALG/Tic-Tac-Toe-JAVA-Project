@@ -155,32 +155,8 @@ public class FXMLDocumentController implements Initializable {
         tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
 
     }
-    public String[] playerListToArray( ArrayList<Player> playerList){
-        int listSize = playerList.size();
-        String[] result = new String[listSize];
-        for(int i=0;i<listSize;i++){
-            Player p = playerList.get(i);
-            result[i]= p.getIdnum()+"/"+p.getNames()+"/"+p.getPoints()+"/"+p.isIsOnline();
-            System.out.println("Player 1 :"+result[i]);
-        }
-        return result;
-    }
     
-    //unimport stringTokenizier
-    public void  ArrayToPlayerList(String [] players){
-        ArrayList<Player> playerList = new ArrayList<Player>();
-        System.out.println("ARRTOPLAYERLIST");
-        for(int i=0;i<players.length;i++){
-            StringTokenizer st = new StringTokenizer(players[i],"/");  
-            Player p = new Player();
-            p.setIdnum(Integer.parseInt(st.nextToken()));
-            p.setNames(st.nextToken());
-            p.setPoints(Integer.parseInt(st.nextToken()));
-            p.setIsOnline(Boolean.valueOf(st.nextToken()));
-            playerList.add(p);
-            System.out.println(p.getIdnum()+ " " + p.getNames()+" "+p.getPoints()+" "+p.isIsOnline());  
-        }
-    }
+    
     public void loadUserList(){
         ArrayList<Player> playerList = GameController.players;
         int listSize = playerList.size();
@@ -189,8 +165,8 @@ public class FXMLDocumentController implements Initializable {
             usersList.add(p);
             System.out.println("Id : " + p.getIdnum() + "  Name : "  + p.getNames()+ "  Points : " + p.getPoints());
         }
-        String [] playerArr = playerListToArray(playerList);
-        ArrayToPlayerList(playerArr);
+//        String [] playerArr = playerListToArray(playerList);
+//        ArrayToPlayerList(playerArr);
     }
 
 }

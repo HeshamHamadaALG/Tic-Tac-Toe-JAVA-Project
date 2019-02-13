@@ -32,16 +32,16 @@ import player.Player;
  * @author EgyJuba
  */
 public class playTypeController implements Initializable {
-    
+
     @FXML
     private Label label;
-    
-    @FXML 
+
+    @FXML
     private Button closeBtn, loginBtn, minBtn;
-    
-    private double x = 0; 
+
+    private double x = 0;
     private double y = 0;
-    
+
 //public playTypeController(){
 //            Platform.runLater(() -> {
 //            try {
@@ -67,49 +67,50 @@ public class playTypeController implements Initializable {
 //            }
 //        });
 //}
+    @FXML
+    private void closeButtonAction() {
 
-@FXML
-private void closeButtonAction(){
-        
         // Close Window Button
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
-        closeStage.close();    
-}
+        closeStage.close();
+    }
 
-@FXML
-private void minButtonAction(){
-        
+    @FXML
+    private void minButtonAction() {
+
         // Close Window Button
         Stage minStage = (Stage) minBtn.getScene().getWindow();
-           minStage.setIconified(true);
-}
+        minStage.setIconified(true);
+    }
 
-@FXML
-private void SingleButtonAction(ActionEvent event) throws IOException{
-    new FXMLDocumentController().singlePlayWindow();
+    @FXML
+    private void SingleButtonAction(ActionEvent event) throws IOException {
+        new FXMLDocumentController().singlePlayWindow();
         System.out.println("Single Player Pressed");
-}
+    }
 
+    @FXML
+    private void MultiButtonAction(ActionEvent event) throws IOException {
 
-@FXML
-private void MultiButtonAction(ActionEvent event) throws IOException{
-   
-        System.out.println("Multi Player Pressed");
         //sara 
-         Message msg = new Message("multiPlay",new String []{Integer.toString(ClientXO.getId()),"2"});
-         ClientXO.client.sendMessage(msg);
-         
-         //end
-}
+//         Message msg = new Message("multiPlay",new String []{Integer.toString(ClientXO.getId()),"2"});
+//         ClientXO.client.sendMessage(msg);
+        new FXMLDocumentController().listWindow();
+        Message msg = new Message("listRequest", new String[]{Integer.toString(ClientXO.getId())});
+        ClientXO.client.sendMessage(msg);
+        System.out.println("Multi Player Pressed");
 
-@FXML
-private void backAction(ActionEvent event) throws IOException{
-    new FXMLDocumentController().mainWindow();
+        //end
+    }
+
+    @FXML
+    private void backAction(ActionEvent event) throws IOException {
+        new FXMLDocumentController().mainWindow();
         System.out.println("Back Pressed");
-}
-   
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    }    
-    
+    }
+
 }

@@ -112,7 +112,11 @@ public class Player extends Thread {
                 if (msg.getType().startsWith("Move")) {
                     handleMove(msg);
                 }
-
+                if(msg.getType().equals("listRequest")){
+                    outputMsg = new Message("listResponse",new String[]{});
+                    outputMsg.setData(playerListToArray(GameController.players));
+                    this.output.writeObject(outputMsg);
+                }
                 //end
             }
         } catch (IOException ex) {
@@ -251,6 +255,17 @@ public class Player extends Thread {
             }
         }
         return player;
+    }
+    
+      public String[] playerListToArray( ArrayList<Player> playerList){
+        int listSize = playerList.size();
+        String[] result = new String[listSize];
+        for(int i=0;i<listSize;i++){
+            Player p = playerList.get(i);
+            result[i]= p.getIdnum()+"/"+p.getNames()+"/"+p.getPoints()+"/"+p.isIsOnline();
+            System.out.println("Player 1 :"+result[i]);
+        }
+        return result;
     }
 
     /**

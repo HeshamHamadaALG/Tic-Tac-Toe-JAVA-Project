@@ -37,6 +37,7 @@ public class DBManger {
             connect = DriverManager
                     .getConnection("jdbc:mysql://localhost/tictactoe?"
                             + "user=root&password=");
+             System.out.println("====> DataBase Connected <====");  
             return true;
 
         } catch (Exception ex) {
@@ -66,6 +67,7 @@ public class DBManger {
             statement = connect.createStatement();
             String queryst = new String("select id,name,points from players ;");
             resultSet = statement.executeQuery(queryst);
+            System.out.println("Loading Table");
             while(resultSet.next()) {
                 players.add(new Player(resultSet.getInt(1),resultSet.getString(2),resultSet.getInt(3)));
             }

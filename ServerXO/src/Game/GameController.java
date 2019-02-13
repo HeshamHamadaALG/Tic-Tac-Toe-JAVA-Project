@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class GameController extends Thread {
 
-    static ArrayList<Player> players;
+    public static ArrayList<Player> players;
     static DBManger dbManger = null;
     ServerSocket listener;
     Socket s;
@@ -33,7 +33,7 @@ public class GameController extends Thread {
             System.out.println(ex.getMessage());
         }
     }
-
+    
     @Override
     public void run() {
         while (true) {

@@ -76,7 +76,7 @@ public class Player extends Thread {
                         Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                         p2.output.writeObject(playRequest);
                     }
-                } else if (msg.getType().equals("playRequest")) {
+                } else if (msg.getType().equals("playRequest")) { 
                     if (msg.getData()[0].equals("accept")) {
                         p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
                         p2 = getPlayer(Integer.parseInt(msg.getData()[2]));

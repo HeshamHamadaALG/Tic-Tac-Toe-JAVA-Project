@@ -72,7 +72,7 @@ private void closeButtonAction(){
 
 @FXML
 private void sendChat(ActionEvent event){
-    chatWrite = (TextField) event.getSource();
+//    chatWrite = (TextField) event.getSource();
        // Chat Action Here
       //sara
         ClientXO.client.sendMessage(new Message("chatting", new String[]{Integer.toString(ClientXO.getId()), "2", "hello dear"}));

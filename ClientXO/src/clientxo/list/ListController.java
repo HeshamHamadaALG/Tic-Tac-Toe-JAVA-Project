@@ -24,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import player.Player;
 
@@ -77,5 +78,14 @@ public class ListController implements Initializable {
         tblId.setCellValueFactory(new PropertyValueFactory<>("idnum"));
         tblNames.setCellValueFactory(new PropertyValueFactory<>("names"));
         tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
+        tableScores.setOnMouseClicked((MouseEvent click) -> {
+          if (click.getClickCount() == 2) {
+              tableScores.getSelectionModel().getSelectedItem();
+              int idOfOpponent = ((Player) tableScores.getSelectionModel().getSelectedItem()).getIdnum();
+              Message msg = new Message("multiPlay", new String[]{Integer.toString(ClientXO.getId()),Integer.toString(idOfOpponent)});
+              ClientXO.client.sendMessage(msg);
+              System.out.println("You Clicked Player : " + ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames());
+          }
+      });
     }
 }

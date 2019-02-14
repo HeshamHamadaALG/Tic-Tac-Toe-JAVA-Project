@@ -76,7 +76,7 @@ public class Client extends Thread {
                     ClientXO.client.sendMessage(message);
                     //playRequest();
                 } else if (msg.getType().equals("play")) {
-                    multiPlay();
+                    new FXMLDocumentController().multiGameWindow();
                 } else if (msg.getType().equals("StartEasyGame")) {
                     new FXMLDocumentController().gameWindow();;
                 } else if (msg.getType().equals("StartMediumGame")) {

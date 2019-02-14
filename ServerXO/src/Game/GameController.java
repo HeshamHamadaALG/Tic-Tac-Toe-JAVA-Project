@@ -45,9 +45,10 @@ public class GameController extends Thread {
                 Client client = new Client(s,new ObjectInputStream(s.getInputStream()),new ObjectOutputStream(s.getOutputStream()));
                 client.start();
             } catch (IOException ex) {
-
+                    
                     //                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println("Server not listen");
+                    break;
             }
         }
     }

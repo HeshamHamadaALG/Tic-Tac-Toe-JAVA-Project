@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -29,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 /**
@@ -64,13 +66,14 @@ public class FXMLDocumentController implements Initializable {
     DBManger db = new DBManger();
     GameController gc;
 
-    ObservableList<Player> usersList = FXCollections.observableArrayList();
+    ObservableList<Player> usersList ;//= FXCollections.observableArrayList();
 
     public FXMLDocumentController() {
         this.tableScores = new TableView<>();
         this.tblId = new TableColumn();
         this.tblNames = new TableColumn();
         this.tblScore = new TableColumn();
+        usersList = FXCollections.observableArrayList();
     }
 
     @FXML
@@ -125,7 +128,6 @@ public class FXMLDocumentController implements Initializable {
         Count++;
     }
 
-    @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         btn.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("off.png"))));
@@ -153,20 +155,28 @@ public class FXMLDocumentController implements Initializable {
         tblId.setCellValueFactory(new PropertyValueFactory<>("idnum"));
         tblNames.setCellValueFactory(new PropertyValueFactory<>("names"));
         tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
+        // add Event Listener To table List  
+//       Add it to Client List Table
+
+        tableScores.setOnMouseClicked((MouseEvent click) -> {
+            if (click.getClickCount() == 2) {
+                tableScores.getSelectionModel().getSelectedItem();
+                System.out.println("You Clicked Player : " + ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames());
+            }
+        });
 
     }
-    
-    
-    public void loadUserList(){
+
+    public void loadUserList() {
         ArrayList<Player> playerList = GameController.players;
         int listSize = playerList.size();
+        usersList.clear();
         for (int i = 0; i < listSize; i++) {
             Player p = playerList.get(i);
             usersList.add(p);
-            System.out.println("Id : " + p.getIdnum() + "  Name : "  + p.getNames()+ "  Points : " + p.getPoints());
+            System.out.println("Id : " + p.getIdnum() + "  Name : " + p.getNames() + "  Points : " + p.getPoints());
         }
-//        String [] playerArr = playerListToArray(playerList);
-//        ArrayToPlayerList(playerArr);
+        System.out.println("UserList Size: "+usersList.size());
     }
 
 }

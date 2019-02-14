@@ -337,6 +337,8 @@ Switching Scenes
                     Optional<ButtonType> result = alert.showAndWait();
                     if(result.get() == AgainButton){
                        new FXMLDocumentController().singlePlayWindow();
+                    } else if(result.get() == CancelButton){
+                       new FXMLDocumentController().playTypeWindow();
                     }
                 }); }
 

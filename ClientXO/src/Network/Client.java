@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -76,10 +77,12 @@ public class Client extends Thread {
                     ClientXO.client.sendMessage(message);
                     //playRequest();
                 } else if (msg.getType().equals("play")) {
+                     System.out.println(msg.getData()[2]);
                     new FXMLDocumentController().multiGameWindow();
-                } else if(msg.getType().equals("chatting")){
+                }else if(msg.getType().equals("chatting")){
+                   
                     System.out.println(msg.getData()[3]+": "+msg.getData()[2]);
-                }
+                } 
                 else if (msg.getType().equals("StartEasyGame")) {
                     new FXMLDocumentController().gameWindow();;
                 } else if (msg.getType().equals("StartMediumGame")) {
@@ -90,13 +93,14 @@ public class Client extends Thread {
                     handleMove(msg.getType());
                 } else if (msg.getType().startsWith("WIN")) {
                     System.out.println("CONGRATS, YOU WIN");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("WIN");
+//                    new FXMLDocumentController().singlePlayWindow();
                 } else if (msg.getType().startsWith("LOSE")) {
                     System.out.println("YOU LOSE");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("LOSE");
                 } else if (msg.getType().equals("DRAW")) {
                     System.out.println("DRAW");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("DRAW");
                 }
                 else if(msg.getType().equals("listResponse")){
                     System.out.println("ListPlayerReply");

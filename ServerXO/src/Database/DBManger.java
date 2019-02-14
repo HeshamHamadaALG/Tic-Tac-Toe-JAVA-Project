@@ -6,6 +6,7 @@
 package Database;
 
 import Game.Player;
+import Network.Message;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,8 +36,9 @@ public class DBManger {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connect = DriverManager
-                    .getConnection("jdbc:mysql://localhost/tictactoe?"
+                    .getConnection("jdbc:mysql://localhost/tiktok_project?"
                             + "user=root&password=");
+             System.out.println("====> DataBase Connected <====");  
             return true;
 
         } catch (Exception ex) {
@@ -62,9 +64,10 @@ public class DBManger {
     public boolean signUp(String name, String password,String email) {
         try {
             //check email and  username
+            
             statement = connect.createStatement();
             String queryst = new String("insert into players (name,password,email) values( '"+name+"', '"+password+"','"+email+"') ;");
-            resultSet = statement.executeQuery(queryst);
+//            resultSet = statement.executeUpdate(queryst);
             statement.executeUpdate(queryst);
             
             return true;
@@ -75,13 +78,13 @@ public class DBManger {
         
     }
     
-    
     public ArrayList<Player> loadPlayer (){
         ArrayList<Player> players = new ArrayList<Player>();
         try {
             statement = connect.createStatement();
             String queryst = new String("select id,name,points from players ;");
             resultSet = statement.executeQuery(queryst);
+            System.out.println("Loading Table");
             while(resultSet.next()) {
                 players.add(new Player(resultSet.getInt(1),resultSet.getString(2),resultSet.getInt(3)));
             }
@@ -91,6 +94,30 @@ public class DBManger {
         }
          return players;
     }
+    
+    public String getGameBoard (Message msg){
+        String senarioGame="there isn't paused game";
+         try {
+            statement = connect.createStatement();
+            String queryst = new String("select * from game where x_user = '"+ Integer.parseInt(msg.getData()[1]) +"' and o_user = '"+Integer.parseInt(msg.getData()[2])+"' or  x_user = '"+ Integer.parseInt(msg.getData()[2]) +"' and o_user = '"+Integer.parseInt(msg.getData()[1])+"' ;");
+            resultSet = statement.executeQuery(queryst);
+            if (resultSet.next()) {
+                return resultSet.getString("senario");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return senarioGame;
+    }
 
- 
+ public Connection getConnect() {
+        return connect;
+    }
+    
+
+    public void setConnect(Connection connect) {
+        this.connect = connect;
+    }
+    
 }

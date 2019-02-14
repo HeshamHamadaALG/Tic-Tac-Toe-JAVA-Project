@@ -5,8 +5,6 @@
  */
 package serverxo;
 
-import Database.DBManger;
-import Game.GameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,8 +40,6 @@ public class ServerXO extends Application {
         });
         stage.setScene(scene);
         stage.show();
-        GameController gc = new  GameController();
-        gc.start();
     }
 
     /**

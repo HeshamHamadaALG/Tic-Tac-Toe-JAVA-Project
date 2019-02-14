@@ -88,7 +88,7 @@ public class SignUpController implements Initializable {
         } else {
             Message msg = new Message("Signup",new String []{name.getText(), password.getText(), email.getText()});
             ClientXO.client.sendMessage(msg);
-            System.out.println("Signup Pressed");
+            System.out.println("Signup Pressed and msg sent");
       
         }
 

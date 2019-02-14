@@ -5,18 +5,26 @@
  */
 package clientxo.game;
 
+import Network.Client;
+import Network.Message;
+import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import player.Player;
 
 
 /**
@@ -46,6 +54,7 @@ public class GameCoreController implements Initializable {
     int playCount = 2;
     @FXML
     Image xo;
+        
 
     
 @FXML
@@ -69,85 +78,78 @@ public Image CountPlayer(){
 @FXML 
 private void Btn1(ActionEvent e){
         btn1 = (Button) e.getSource();
-        btn1.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 0 0",new String[]{Integer.toString(ClientXO.getId())})); 
         btn1.setDisable(true);
         System.out.println("Cell 1 clcicked");
-
 }
+
 @FXML
 private void Btn2(ActionEvent e){
         btn2 = (Button) e.getSource();
-        btn2.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 1 0",new String[]{Integer.toString(ClientXO.getId())})); 
         btn2.setDisable(true);
         System.out.println("Cell 2 clcicked");
 }
 @FXML
 private void Btn3(ActionEvent e){
         btn3 = (Button) e.getSource();
-        btn3.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 2 0",new String[]{Integer.toString(ClientXO.getId())})); 
         btn3.setDisable(true);
         System.out.println("Cell 3 clcicked");
 }
 @FXML
 private void Btn4(ActionEvent e){
         btn4 = (Button) e.getSource();
-        btn4.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 0 1",new String[]{Integer.toString(ClientXO.getId())})); 
         btn4.setDisable(true);
         System.out.println("Cell 4 clcicked");
 }
 @FXML
 private void Btn5(ActionEvent e){
         btn5 = (Button) e.getSource();
-        btn5.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 1 1",new String[]{Integer.toString(ClientXO.getId())})); 
         btn5.setDisable(true);
         System.out.println("Cell 5 clcicked");
 }
 @FXML
 private void Btn6(ActionEvent e){
         btn6 = (Button) e.getSource();
-        btn6.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 2 1",new String[]{Integer.toString(ClientXO.getId())})); 
         btn6.setDisable(true);
         System.out.println("Cell 6 clcicked");
 }
 @FXML
 private void Btn7(ActionEvent e){
         btn7 = (Button) e.getSource();
-        btn7.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 0 2",new String[]{Integer.toString(ClientXO.getId())})); 
         btn7.setDisable(true);
         System.out.println("Cell 7 clcicked");
 }
 @FXML
 private void Btn8(ActionEvent e){
         btn8 = (Button) e.getSource();
-        btn8.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 1 2",new String[]{Integer.toString(ClientXO.getId())})); 
         btn8.setDisable(true);
         System.out.println("Cell 8 clcicked");
 }
 @FXML
 private void Btn9(ActionEvent e){
         btn9 = (Button) e.getSource();
-        btn9.setGraphic(new ImageView(CountPlayer()));
-        playCount++;
+        ClientXO.client.sendMessage(new Message("Move 2 2",new String[]{Integer.toString(ClientXO.getId())})); 
         btn9.setDisable(true);
         System.out.println("Cell 9 clcicked");
 }
+
 
 @FXML
 private void backAction(ActionEvent event) throws IOException{
     new FXMLDocumentController().playTypeWindow();
         System.out.println("Back Pressed");
 }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+
+    }       
 }

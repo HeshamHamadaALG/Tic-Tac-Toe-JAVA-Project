@@ -1,5 +1,9 @@
 package player;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,38 +15,54 @@ package player;
  * @author EgyJuba
  */
 public class Player {
-    String email;
-    String name;
-    String password;
+    int idnum;
+    String names;
+    int points;
+    boolean isOnline;
 
-    public Player(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-    
-    public String getEmail() {
-        return email;
+
+     public Player() {
+        this.idnum = -1;
+        this.isOnline = false;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public Player(int ID, String name, int points) {
+        this.idnum = ID;
+        this.names = name;
+        this.points = points;
+        this.isOnline = false;
     }
 
-    public String getName() {
-        return name;
+    public int getIdnum() {
+        return idnum;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIdnum(int idnum) {
+        this.idnum = idnum;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNames() {
+        return names;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNames(String names) {
+        this.names = names;
     }
-    
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public boolean isIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
+    }
+
 }

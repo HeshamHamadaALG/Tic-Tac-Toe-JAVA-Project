@@ -5,7 +5,12 @@
  */
 package clientxo;
 
+import Network.Client;
+import Network.Message;
+import static clientxo.ClientXO.client;
+import clientxo.playerForm.playTypeController;
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -17,10 +22,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -36,11 +43,15 @@ public class FXMLDocumentController implements Initializable {
 
     private double x = 0;
     private double y = 0;
-
+    public  playTypeController ptController;
+//    public  GameCoreController crController;
     @FXML
     private void closeButtonAction() {
 
         // Close Window Button
+        Message msg = new Message("close",new String []{});
+        ClientXO.client.sendMessage(msg);
+        ClientXO.client.closeConn();
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
         closeStage.close();
     }
@@ -152,10 +163,10 @@ Switching Scenes
     }
 
     // Game Scene 
-    public void multiPlayWindow() {
+    public void listWindow() {
         Platform.runLater(() -> {
             try {
-                Parent multiView = FXMLLoader.load(getClass().getResource("./game/GameCore.fxml"));
+                Parent multiView = FXMLLoader.load(getClass().getResource("./list/list.fxml"));
                 Scene multiScene = new Scene(multiView);
                 Stage multiwindow = ClientXO.getGlobalStage();
 
@@ -207,10 +218,11 @@ Switching Scenes
     public void playTypeWindow() {
         Platform.runLater(() -> {
             try {
-                Parent SingleView = FXMLLoader.load(getClass().getResource("./playerForm/playType.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("./playerForm/playType.fxml"));
+                Parent SingleView = loader.load();
                 Scene SingleScene = new Scene(SingleView);
                 Stage singlewindow = ClientXO.getGlobalStage();
-
+                ptController = (playTypeController) loader.getController();
                 // to make the stage movable
                 SingleView.setOnMousePressed((MouseEvent e) -> {
                     x = e.getSceneX();
@@ -228,6 +240,35 @@ Switching Scenes
             }
         });
     }
+       
+    // Multi Scene
+        public void multiGameWindow() {
+        Platform.runLater(() -> {
+            try {
+                System.out.println("LOading MULTIGAME");
+                Parent MultiView = FXMLLoader.load(getClass().getResource("./multigame/MultiGame.fxml"));
+                Scene MultiScene = new Scene(MultiView);
+                Stage Multiwindow = ClientXO.getGlobalStage();
+
+                // to make the stage movable
+                MultiView.setOnMousePressed((MouseEvent e) -> {
+                    x = e.getSceneX();
+                    y = e.getSceneY();
+                });
+                MultiView.setOnMouseDragged((MouseEvent e) -> {
+                    Multiwindow.setX(e.getScreenX() - x);
+                    Multiwindow.setY(e.getScreenY() - y);
+                });
+
+                Multiwindow.setScene(MultiScene);
+                Multiwindow.show();
+            } catch (IOException ex) {
+                System.out.println("I can't Load Window");
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
+
 
     // Main Scene 
     public void mainWindow() {
@@ -251,6 +292,15 @@ Switching Scenes
         } catch (IOException ex) {
             //Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void alertLogin(){
+           Alert alert = new Alert(Alert.AlertType.INFORMATION);
+           alert.initStyle(StageStyle.UNDECORATED);
+           alert.setTitle("Login Alert !!");
+           alert.setHeaderText(null);
+           alert.setContentText("You Entered Wronge UserName Or Password  !!");
+           alert.showAndWait();
     }
 
     @Override

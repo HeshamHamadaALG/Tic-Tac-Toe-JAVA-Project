@@ -5,7 +5,9 @@
  */
 package clientxo.levels;
 
+import Network.Message;
 import clientxo.FXMLDocumentController;
+import clientxo.ClientXO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -63,20 +65,19 @@ private void minButtonAction(){
 
 @FXML
 private void easyAction(ActionEvent event) throws IOException{
-    new FXMLDocumentController().gameWindow();
-        System.out.println("Easy Level Pressed");
+        ClientXO.client.sendMessage(new Message("EasySingle",new String[]{Integer.toString(ClientXO.getId())})); 
+//    new FXMLDocumentController().gameWindow();
+//        System.out.println("Easy Level Pressed");
 }
 
 @FXML
 private void medAction(ActionEvent event) throws IOException{
-    new FXMLDocumentController().gameWindow();
-        System.out.println("Medium Level Pressed");
+     ClientXO.client.sendMessage(new Message("MediumSingle",new String[]{Integer.toString(ClientXO.getId())})); 
 }
 
 @FXML
 private void hardAction(ActionEvent event) throws IOException{
-    new FXMLDocumentController().gameWindow();
-        System.out.println("Hard Level Pressed");
+    ClientXO.client.sendMessage(new Message("HardSingle",new String[]{Integer.toString(ClientXO.getId())})); 
 }
 
 

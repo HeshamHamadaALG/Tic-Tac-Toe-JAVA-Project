@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -39,7 +40,8 @@ public class loginController implements Initializable {
     public TextField name;
     @FXML
     public PasswordField password;
-
+    public static Client client;
+     FXMLDocumentController controller;
 
     @FXML
     private void closeButtonAction() {
@@ -65,11 +67,13 @@ public class loginController implements Initializable {
     }
 
     @FXML
-    private void GameAction(ActionEvent event) throws IOException {
+    private void LoginButton(ActionEvent event) throws IOException {
         // Login Button
+        
         Message msg = new Message("Login",new String []{name.getText(),password.getText()});
         ClientXO.client.sendMessage(msg);
         System.out.println("Login Pressed");
+
     }
 
      @FXML

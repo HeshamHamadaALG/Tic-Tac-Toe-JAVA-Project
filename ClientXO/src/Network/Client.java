@@ -92,13 +92,14 @@ public class Client extends Thread {
                     handleMove(msg.getType());
                 } else if (msg.getType().startsWith("WIN")) {
                     System.out.println("CONGRATS, YOU WIN");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("WIN");
+//                    new FXMLDocumentController().singlePlayWindow();
                 } else if (msg.getType().startsWith("LOSE")) {
                     System.out.println("YOU LOSE");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("LOSE");
                 } else if (msg.getType().equals("DRAW")) {
                     System.out.println("DRAW");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("DRAW");
                 }
                 else if(msg.getType().equals("listResponse")){
                     System.out.println("ListPlayerReply");

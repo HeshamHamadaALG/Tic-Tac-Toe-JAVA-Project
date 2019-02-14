@@ -81,7 +81,8 @@ public class Player extends Thread {
                         p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
                         p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
                         if (p1.isOnline && p2.isOnline) {
-                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
+                            String senario= GameController.dbManger.getGameBoard(msg);
+                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum),senario}));
                             p1.output.writeObject(outputMsg);
                             p2.output.writeObject(outputMsg);
                             intializeMultiGame(p1, p2);
@@ -90,6 +91,12 @@ public class Player extends Thread {
                         Message rejected = (new Message("reject", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                         p1.output.writeObject(rejected);
                     }
+                } else if (msg.getType().equals("chatting")) {
+                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+                    p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                    Message chat= new Message("chatting", new String[]{msg.getData()[0],msg.getData()[1],msg.getData()[2],p1.getNames(),p2.getNames()});
+                    p1.output.writeObject(chat);
+                    p2.output.writeObject(chat);
                 }
                 if (msg.getType().equals("EasySingle")) {
                     Player player = getPlayer(Integer.parseInt(msg.getData()[0]));

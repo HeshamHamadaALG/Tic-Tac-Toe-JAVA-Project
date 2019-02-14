@@ -6,6 +6,7 @@
 package Database;
 
 import Game.Player;
+import Network.Message;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -76,6 +77,22 @@ public class DBManger {
             Logger.getLogger(DBManger.class.getName()).log(Level.SEVERE, null, ex);
         }
          return players;
+    }
+    
+    public String getGameBoard (Message msg){
+        String senarioGame="there isn't paused game";
+         try {
+            statement = connect.createStatement();
+            String queryst = new String("select * from game where x_user = '"+ Integer.parseInt(msg.getData()[1]) +"' and o_user = '"+Integer.parseInt(msg.getData()[2])+"' or  x_user = '"+ Integer.parseInt(msg.getData()[2]) +"' and o_user = '"+Integer.parseInt(msg.getData()[1])+"' ;");
+            resultSet = statement.executeQuery(queryst);
+            if (resultSet.next()) {
+                return resultSet.getString("senario");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return senarioGame;
     }
 
  public Connection getConnect() {

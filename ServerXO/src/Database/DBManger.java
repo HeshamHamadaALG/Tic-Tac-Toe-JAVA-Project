@@ -37,7 +37,6 @@ public class DBManger {
             Class.forName("com.mysql.jdbc.Driver");
             connect = DriverManager
                     .getConnection("jdbc:mysql://localhost/tiktok_project?"
-
                             + "user=root&password=");
              System.out.println("====> DataBase Connected <====");  
             return true;
@@ -62,22 +61,7 @@ public class DBManger {
         }
         return -1;
     }
-    public boolean signUp(String name, String password,String email) {
-        try {
-            //check email and  username
-            
-            statement = connect.createStatement();
-            String queryst = new String("insert into players (name,password,email) values( '"+name+"', '"+password+"','"+email+"') ;");
-//            resultSet = statement.executeUpdate(queryst);
-            statement.executeUpdate(queryst);
-            
-            return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        }
-        
-    }    
+    
     /**
      *
      * @param player
@@ -111,10 +95,16 @@ public class DBManger {
         }
          return players;
     }
+
+ public Connection getConnect() {
+        return connect;
+    }
     
 
+    public void setConnect(Connection connect) {
+        this.connect = connect;
+    }
     
- 
 
     
     public String getGameBoard (Message msg){
@@ -133,13 +123,7 @@ public class DBManger {
         return senarioGame;
     }
 
- public Connection getConnect() {
-        return connect;
-    }
-    
 
-    public void setConnect(Connection connect) {
-        this.connect = connect;
-    }
     
 }
+

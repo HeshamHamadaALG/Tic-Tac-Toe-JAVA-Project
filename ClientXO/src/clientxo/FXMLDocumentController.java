@@ -5,12 +5,10 @@
  */
 package clientxo;
 
-import Network.Client;
 import Network.Message;
-import static clientxo.ClientXO.client;
+import clientxo.list.ListController;
 import clientxo.playerForm.playTypeController;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -50,14 +48,11 @@ public class FXMLDocumentController implements Initializable {
     private double x = 0;
     private double y = 0;
     public  playTypeController ptController;
-//    public  GameCoreController crController;
+
     @FXML
     private void closeButtonAction() {
 
         // Close Window Button
-        Message msg = new Message("CloseConn",new String []{});
-        ClientXO.client.sendMessage(msg);
-        ClientXO.client.closeConn();
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
         closeStage.close();
     }
@@ -348,6 +343,56 @@ Switching Scenes
                        new FXMLDocumentController().playTypeWindow();
                     }
                 }); }
+    
+    
+    public void requestSent(String user){
+       Platform.runLater(() -> {
+            Dialog alert = new Dialog();
+                    alert.initStyle(StageStyle.UNDECORATED);
+                    
+                    ButtonType CancelButton= new ButtonType("Cancel",ButtonData.OK_DONE);
+                    alert.getDialogPane().getButtonTypes().addAll(CancelButton);
+                    alert.setTitle("Play request !!");
+//                    alert.setGraphic(new ImageView(this.getClass().getResource("win.png").toString()));
+                    alert.setContentText("You sent Request to : " + user + "\n Waiting For Respond" );
+                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                    alert.setHeaderText(null);
+                    Optional<ButtonType> result = alert.showAndWait();
+                    
+                    if(result.get() == CancelButton){
+                       alert.close();
+                    }
+       });
+    }
+    
+    public void playAccept(String idPl,String idP2){
+       Platform.runLater(() -> {
+            Dialog alert = new Dialog();
+                    alert.initStyle(StageStyle.UNDECORATED);
+                    
+                    ButtonType AcceptButton= new ButtonType("Accept",ButtonData.OK_DONE);
+                    ButtonType CancelButton= new ButtonType("Cancel",ButtonData.OK_DONE);
+                    alert.getDialogPane().getButtonTypes().addAll(AcceptButton,CancelButton);
+                    alert.setTitle("Play request !!");
+//                    alert.setGraphic(new ImageView(this.getClass().getResource("win.png").toString()));
+                    alert.setContentText(idPl+ "Sent You Request to play" );
+                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                    alert.setHeaderText(null);
+                    
+             Optional<ButtonType> result = alert.showAndWait();
+              if(result.get() == AcceptButton){
+//                    ListController listController = new ListController();
+                    System.out.println("player id : " + idPl + "sent request to : " + ClientXO.getId());
+                    Message message = (new Message("playRequest", new String[]{"accept",idPl,Integer.toString(ClientXO.getId())}));
+                    ClientXO.client.sendMessage(message);                    
+               } else if(result.get() == CancelButton){
+                   Message message = (new Message("playRequest", new String[]{"reject",idPl,Integer.toString(ClientXO.getId())}));
+                    ClientXO.client.sendMessage(message);
+                    alert.close();
+//                     new FXMLDocumentController().playTypeWindow();
+               }
+       });
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

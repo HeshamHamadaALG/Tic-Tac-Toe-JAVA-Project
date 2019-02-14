@@ -2,13 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
-        <group name="Group 20190210-06:03:55">
-            <file>file:/home/atarek/NetBeansProjects/java_project_10_2/Tic-Tac-Toe-JAVA-Project/ServerXO/src/Network/Message.java</file>
-            <file>file:/home/atarek/NetBeansProjects/java_project_10_2/Tic-Tac-Toe-JAVA-Project/ServerXO/src/Database/DBManger.java</file>
-            <file>file:/home/atarek/NetBeansProjects/java_project_10_2/Tic-Tac-Toe-JAVA-Project/ServerXO/src/Game/Client.java</file>
-            <file>file:/home/atarek/NetBeansProjects/java_project_10_2/Tic-Tac-Toe-JAVA-Project/ServerXO/src/serverxo/FXMLDocumentController.java</file>
-            <file>file:/home/atarek/NetBeansProjects/java_project_10_2/Tic-Tac-Toe-JAVA-Project/ServerXO/src/Game/GameController.java</file>
+        <group>
+            <file>file:/C:/Users/EgyJuba/Documents/GitHub/Tic-Tac-Toe-JAVA-Project/ServerXO/src/Game/Player.java</file>
+            <file>file:/C:/Users/EgyJuba/Documents/GitHub/Tic-Tac-Toe-JAVA-Project/ServerXO/src/serverxo/ServerXO.java</file>
+            <file>file:/C:/Users/EgyJuba/Documents/GitHub/Tic-Tac-Toe-JAVA-Project/ServerXO/src/Database/DBManger.java</file>
+            <file>file:/C:/Users/EgyJuba/Documents/GitHub/Tic-Tac-Toe-JAVA-Project/ServerXO/src/Game/Client.java</file>
         </group>
     </open-files>
 </project-private>

@@ -8,8 +8,6 @@ package clientxo.list;
 import Network.Message;
 import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
-//import java.awt.TextArea;
-//import java.awt.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,13 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import player.Player;
@@ -48,6 +43,8 @@ public class ListController implements Initializable {
     private TableColumn<Player, Integer> tblScore;
     @FXML
     private TableView<Player> tableScores;
+    
+    public static int idOfOpponent;
 
     public ListController() {
         this.tableScores = new TableView<>();
@@ -81,11 +78,26 @@ public class ListController implements Initializable {
         tableScores.setOnMouseClicked((MouseEvent click) -> {
           if (click.getClickCount() == 2) {
               tableScores.getSelectionModel().getSelectedItem();
-              int idOfOpponent = ((Player) tableScores.getSelectionModel().getSelectedItem()).getIdnum();
+              idOfOpponent = ((Player) tableScores.getSelectionModel().getSelectedItem()).getIdnum();
+              System.out.println("ID OF Opponent "+idOfOpponent);
               Message msg = new Message("multiPlay", new String[]{Integer.toString(ClientXO.getId()),Integer.toString(idOfOpponent)});
               ClientXO.client.sendMessage(msg);
+//              setIdOfOpponent(idOfOpponent);
+              String user = ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames();
               System.out.println("You Clicked Player : " + ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames());
+              
+              new FXMLDocumentController().requestSent(user);
           }
-      });
+      }); 
+        
     }
+
+    public static int getIdOfOpponent() {
+        return idOfOpponent;
+    }
+
+    public void setIdOfOpponent(int idOfOpponent) {
+        this.idOfOpponent = idOfOpponent;
+    }
+
 }

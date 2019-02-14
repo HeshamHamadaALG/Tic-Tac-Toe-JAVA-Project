@@ -35,6 +35,9 @@ class Client extends Thread {
                 Message msg = (Message) input.readObject();
                 if (msg == null) {
                     System.out.println("client is offline");
+                    this.input.close();
+                    this.output.close();
+                    this.socket.close();
                     return;
                 }
                 System.out.println(msg.getType());
@@ -51,6 +54,13 @@ class Client extends Thread {
                 System.out.println(msg.getType());
             } catch (IOException ex) {
                  System.out.println("client is offline");
+                try {
+                    this.input.close();
+                    this.output.close();
+                    this.socket.close();
+                } catch (IOException ex1) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex1);
+                }
                  return;
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,9 +88,8 @@ class Client extends Thread {
                 
                 //sara to make player online
                 p.isOnline= true;
-                // end 
-                
-                p.start();
+                // end     
+                p.startThread();
                 try {
                     p.output.writeObject(new Message("Hello",new String[]{}));
                 } catch (IOException ex) {

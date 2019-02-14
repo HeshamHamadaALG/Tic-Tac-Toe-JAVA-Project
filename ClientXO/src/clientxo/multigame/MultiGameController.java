@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -72,10 +73,10 @@ private void closeButtonAction(){
 
 @FXML
 private void sendChat(ActionEvent event){
-    chatWrite = (TextField) event.getSource();
+//    chatWrite = (TextField) event.getSource();
        // Chat Action Here
-       //sara
-        ClientXO.client.sendMessage(new Message("chatting", new String[]{Integer.toString(ClientXO.getId()), "hello dear"}));
+      //sara
+        ClientXO.client.sendMessage(new Message("chatting", new String[]{Integer.toString(ClientXO.getId()),  "hello dear"}));
         //end
 }
 
@@ -167,3 +168,4 @@ private void backAction(ActionEvent event) throws IOException{
         System.out.println("You are in MultiPlayer");
             }       
 }
+

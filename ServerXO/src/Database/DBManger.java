@@ -62,6 +62,23 @@ public class DBManger {
         return -1;
     }
     
+    /**
+     *
+     * @param player
+     * @throws SQLException
+     */
+    public void update(Player player) throws SQLException{
+        try {
+            String query = ("update players set points = ? where id = ?;");
+            PreparedStatement preparedStmt = connect.prepareStatement(query);
+            preparedStmt.setInt   (1, player.getPoints());
+            preparedStmt.setInt   (2, player.getIdnum());
+            preparedStmt.executeUpdate();
+        } catch(Exception ex){
+            
+        }
+    }
+    
     public ArrayList<Player> loadPlayer (){
         ArrayList<Player> players = new ArrayList<Player>();
         try {
@@ -79,6 +96,19 @@ public class DBManger {
          return players;
     }
     
+    
+
+ public Connection getConnect() {
+        return connect;
+    }
+    
+
+    public void setConnect(Connection connect) {
+        this.connect = connect;
+    }
+    
+
+    
     public String getGameBoard (Message msg){
         String senarioGame="there isn't paused game";
          try {
@@ -95,13 +125,7 @@ public class DBManger {
         return senarioGame;
     }
 
- public Connection getConnect() {
-        return connect;
-    }
-    
 
-    public void setConnect(Connection connect) {
-        this.connect = connect;
-    }
     
 }
+

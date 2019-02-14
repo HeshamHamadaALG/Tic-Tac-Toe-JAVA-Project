@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game;
 
+import Database.DBManger;
 import Network.Message;
 import SinglePlayer.AI;
 import SinglePlayer.EasyAI;
@@ -15,15 +11,18 @@ import java.io.BufferedReader;
 import java.io.*;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * ok
  *
  * @author LapTop MarKet
  */
-public class Player extends Thread {
+//public class Player extends Thread {
+public class Player {
 
     char mark;
     Player opponent;
@@ -54,7 +53,9 @@ public class Player extends Thread {
         this.isOnline = false;
     }
 
-    public void run() {
+    public void startThread(){
+        new Thread(new Runnable(){
+             public void run() {
         try {
             while (true) {
                 System.out.println("Listening Player");
@@ -92,13 +93,18 @@ public class Player extends Thread {
                         p1.output.writeObject(rejected);
                     }
                 } else if (msg.getType().equals("chatting")) {
-                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
-                    MultiGame multiGame = (MultiGame) p1.game;
-                    Player opponent = (p1 == multiGame.p1) ? multiGame.p2 : multiGame.p1;
+                    Player player=null;
+                    player = getPlayer(Integer.parseInt(msg.getData()[0]));
+
+                    MultiGame multiGame = (MultiGame) player.game;
+                    Player opponent = (player == multiGame.p1) ? multiGame.p2 : multiGame.p1;
                     //p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
-                    Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], p1.getNames(), p2.getNames()});
-                    p1.output.writeObject(chat);
+                    Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], player.getNames(), opponent.getNames()});
+                    player.output.writeObject(chat);
                     opponent.output.writeObject(chat);
+
+                   
+
                 }
                 if (msg.getType().equals("EasySingle")) {
                     Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
@@ -122,19 +128,26 @@ public class Player extends Thread {
                     handleMove(msg);
                 }
                 if (msg.getType().equals("listRequest")) {
+
+                    Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
+
                     outputMsg = new Message("listResponse", new String[]{});
                     outputMsg.setData(playerListToArray(GameController.players));
-                    this.output.writeObject(outputMsg);
+                    player.output.writeObject(outputMsg);
                 }
                 //end
             }
         } catch (IOException ex) {
-            System.out.println("client is offline");
+            System.out.println("Player is offline");
             return;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+    }            catch (ClassNotFoundException ex) {
+                     Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                 }
         }
+        }).start();
+
     }
+   
 
     public void handleMultiplayer(Message msg) {
         ArrayList<Player> players = GameController.players;
@@ -201,8 +214,20 @@ public class Player extends Thread {
                 player.output.writeObject(new Message("Move X " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
                 if (singleGame.hasWinner()) {
+                    //Add Winning Points
                     Thread.sleep(500);
                     player.output.writeObject(new Message("WIN", new String[]{}));
+                    if (singleGame.Computer instanceof EasyAI) {
+                        player.setPoints(points += 5);
+                    }
+                    if (singleGame.Computer instanceof MediumAI) {
+                        player.setPoints(points += 10);
+                    }
+                    if (singleGame.Computer instanceof HardAI) {
+                        player.setPoints(points += 15);
+                    }
+                    GameController.dbManger.update(player);
+
                 } else if (singleGame.boardFilledUp()) {
                     Thread.sleep(500);
                     player.output.writeObject(new Message("DRAW", new String[]{}));
@@ -225,6 +250,8 @@ public class Player extends Thread {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -237,9 +264,13 @@ public class Player extends Thread {
                 opponent.output.writeObject(new Message("Move " + player.mark + " " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
                 if (multiGame.hasWinner()) {
-                    Thread.sleep(500);
-                    player.output.writeObject(new Message("WIN", new String[]{}));
-                    opponent.output.writeObject(new Message("LOSE", new String[]{}));
+                    if (multiGame instanceof MultiGame) {
+                        Thread.sleep(500);
+                        player.output.writeObject(new Message("WIN", new String[]{}));
+                        opponent.output.writeObject(new Message("LOSE", new String[]{}));
+                        player.setPoints(points += 10);
+                        GameController.dbManger.update(player);
+                    }
 
                 } else if (multiGame.boardFilledUp()) {
                     Thread.sleep(500);
@@ -250,6 +281,8 @@ public class Player extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

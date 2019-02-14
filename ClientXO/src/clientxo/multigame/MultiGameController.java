@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the editor
  */
 package clientxo.multigame;
 
@@ -72,8 +72,11 @@ private void closeButtonAction(){
 
 @FXML
 private void sendChat(ActionEvent event){
-    chatWrite = (TextField) event.getSource();
+//    chatWrite = (TextField) event.getSource();
        // Chat Action Here
+      //sara
+        ClientXO.client.sendMessage(new Message("chatting", new String[]{Integer.toString(ClientXO.getId()), "2", "hello dear"}));
+        //end
 }
 
 @FXML

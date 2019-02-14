@@ -1,32 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game;
-import Game.SingleGame;
+
 import Database.DBManger;
-import static Game.GameController.dbManger;
 import Network.Message;
 import SinglePlayer.AI;
 import SinglePlayer.EasyAI;
 import SinglePlayer.HardAI;
 import SinglePlayer.MediumAI;
 import java.io.BufferedReader;
+
 import java.io.*;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * ok
  *
  * @author LapTop MarKet
  */
@@ -83,12 +74,13 @@ public class Player extends Thread {
                         Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                         p2.output.writeObject(playRequest);
                     }
-                } else if (msg.getType().equals("playRequest")) { 
+                } else if (msg.getType().equals("playRequest")) {
                     if (msg.getData()[0].equals("accept")) {
                         p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
                         p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
                         if (p1.isOnline && p2.isOnline) {
-                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
+                            String senario = GameController.dbManger.getGameBoard(msg);
+                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum), senario}));
                             p1.output.writeObject(outputMsg);
                             p2.output.writeObject(outputMsg);
                             intializeMultiGame(p1, p2);
@@ -97,6 +89,12 @@ public class Player extends Thread {
                         Message rejected = (new Message("reject", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                         p1.output.writeObject(rejected);
                     }
+                } else if (msg.getType().equals("chatting")) {
+                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+                    p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                    Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], msg.getData()[2], p1.getNames(), p2.getNames()});
+                    p1.output.writeObject(chat);
+                    p2.output.writeObject(chat);
                 }
                 if (msg.getType().equals("EasySingle")) {
                     Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
@@ -119,8 +117,8 @@ public class Player extends Thread {
                 if (msg.getType().startsWith("Move")) {
                     handleMove(msg);
                 }
-                if(msg.getType().equals("listRequest")){
-                    outputMsg = new Message("listResponse",new String[]{});
+                if (msg.getType().equals("listRequest")) {
+                    outputMsg = new Message("listResponse", new String[]{});
                     outputMsg.setData(playerListToArray(GameController.players));
                     this.output.writeObject(outputMsg);
                 }
@@ -130,8 +128,6 @@ public class Player extends Thread {
             System.out.println("client is offline");
             return;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -182,7 +178,7 @@ public class Player extends Thread {
         p2.mark = 'O';
     }
 
-    public void handleMove(Message msg) throws SQLException, ClassNotFoundException {
+    public void handleMove(Message msg) {
         System.out.println("request to " + msg.getType());
         int col = Integer.parseInt(msg.getType().charAt(5) + "");
         int row = Integer.parseInt(msg.getType().charAt(7) + "");
@@ -194,36 +190,27 @@ public class Player extends Thread {
         }
     }
 
-    public void handleSingleGame(Player player, int col, int row) throws SQLException, ClassNotFoundException {
+    public void handleSingleGame(Player player, int col, int row) {
         try {
             SingleGame singleGame = (SingleGame) player.game;
             if (singleGame.legalMove(col, row, player.mark)) {
                 player.output.writeObject(new Message("Move X " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
-                if (singleGame.hasWinner()) { 
+                if (singleGame.hasWinner()) {
                     //Add Winning Points
-                    if(singleGame.Computer instanceof EasyAI) {
-                        Thread.sleep(500);
-                        player.output.writeObject(new Message("WIN", new String[]{}));
-                        dbManger = new DBManger();
-                        player.setPoints(points+=5);
-                        GameController.dbManger.update(player);
+                    Thread.sleep(500);
+                    player.output.writeObject(new Message("WIN", new String[]{}));
+                    if (singleGame.Computer instanceof EasyAI) {
+                        player.setPoints(points += 5);
                     }
-                    if(singleGame.Computer instanceof MediumAI) {
-                        Thread.sleep(500);
-                        player.output.writeObject(new Message("WIN", new String[]{}));
-                        dbManger = new DBManger();
-                        player.setPoints(points+=10);
-                        GameController.dbManger.update(player);
+                    if (singleGame.Computer instanceof MediumAI) {
+                        player.setPoints(points += 10);
                     }
-                    if(singleGame.Computer instanceof HardAI) {
-                        Thread.sleep(500);
-                        player.output.writeObject(new Message("WIN", new String[]{}));
-                        dbManger = new DBManger();
-                        player.setPoints(points+=15);
-                        GameController.dbManger.update(player);
+                    if (singleGame.Computer instanceof HardAI) {
+                        player.setPoints(points += 15);
                     }
-                    
+                    GameController.dbManger.update(player);
+
                 } else if (singleGame.boardFilledUp()) {
                     Thread.sleep(500);
                     player.output.writeObject(new Message("DRAW", new String[]{}));
@@ -246,10 +233,12 @@ public class Player extends Thread {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void handleMultiGame(Player player, int col, int row) throws SQLException {
+    public void handleMultiGame(Player player, int col, int row) {
         try {
             MultiGame multiGame = (MultiGame) player.game;
             Player opponent = (player == multiGame.p1) ? multiGame.p2 : multiGame.p1;
@@ -258,12 +247,11 @@ public class Player extends Thread {
                 opponent.output.writeObject(new Message("Move " + player.mark + " " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
                 if (multiGame.hasWinner()) {
-                    if(multiGame instanceof MultiGame){
+                    if (multiGame instanceof MultiGame) {
                         Thread.sleep(500);
                         player.output.writeObject(new Message("WIN", new String[]{}));
                         opponent.output.writeObject(new Message("LOSE", new String[]{}));
-                        dbManger = new DBManger();
-                        player.setPoints(points+=10);
+                        player.setPoints(points += 10);
                         GameController.dbManger.update(player);
                     }
 
@@ -276,6 +264,8 @@ public class Player extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -291,14 +281,14 @@ public class Player extends Thread {
         }
         return player;
     }
-    
-      public String[] playerListToArray( ArrayList<Player> playerList){
+
+    public String[] playerListToArray(ArrayList<Player> playerList) {
         int listSize = playerList.size();
         String[] result = new String[listSize];
-        for(int i=0;i<listSize;i++){
+        for (int i = 0; i < listSize; i++) {
             Player p = playerList.get(i);
-            result[i]= p.getIdnum()+"/"+p.getNames()+"/"+p.getPoints()+"/"+p.isIsOnline();
-            System.out.println("Player 1 :"+result[i]);
+            result[i] = p.getIdnum() + "/" + p.getNames() + "/" + p.getPoints() + "/" + p.isIsOnline();
+            System.out.println("Player 1 :" + result[i]);
         }
         return result;
     }

@@ -76,12 +76,13 @@ public class Player extends Thread {
                         Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                         p2.output.writeObject(playRequest);
                     }
-                } else if (msg.getType().equals("playRequest")) { 
+                } else if (msg.getType().equals("playRequest")) {
                     if (msg.getData()[0].equals("accept")) {
                         p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
                         p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
                         if (p1.isOnline && p2.isOnline) {
-                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
+                            String senario = GameController.dbManger.getGameBoard(msg);
+                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum), senario}));
                             p1.output.writeObject(outputMsg);
                             p2.output.writeObject(outputMsg);
                             intializeMultiGame(p1, p2);
@@ -90,6 +91,14 @@ public class Player extends Thread {
                         Message rejected = (new Message("reject", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                         p1.output.writeObject(rejected);
                     }
+                } else if (msg.getType().equals("chatting")) {
+                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+                    MultiGame multiGame = (MultiGame) p1.game;
+                    Player opponent = (p1 == multiGame.p1) ? multiGame.p2 : multiGame.p1;
+                    //p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                    Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], p1.getNames(), p2.getNames()});
+                    p1.output.writeObject(chat);
+                    opponent.output.writeObject(chat);
                 }
                 if (msg.getType().equals("EasySingle")) {
                     Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
@@ -112,8 +121,8 @@ public class Player extends Thread {
                 if (msg.getType().startsWith("Move")) {
                     handleMove(msg);
                 }
-                if(msg.getType().equals("listRequest")){
-                    outputMsg = new Message("listResponse",new String[]{});
+                if (msg.getType().equals("listRequest")) {
+                    outputMsg = new Message("listResponse", new String[]{});
                     outputMsg.setData(playerListToArray(GameController.players));
                     this.output.writeObject(outputMsg);
                 }
@@ -256,14 +265,14 @@ public class Player extends Thread {
         }
         return player;
     }
-    
-      public String[] playerListToArray( ArrayList<Player> playerList){
+
+    public String[] playerListToArray(ArrayList<Player> playerList) {
         int listSize = playerList.size();
         String[] result = new String[listSize];
-        for(int i=0;i<listSize;i++){
+        for (int i = 0; i < listSize; i++) {
             Player p = playerList.get(i);
-            result[i]= p.getIdnum()+"/"+p.getNames()+"/"+p.getPoints()+"/"+p.isIsOnline();
-            System.out.println("Player 1 :"+result[i]);
+            result[i] = p.getIdnum() + "/" + p.getNames() + "/" + p.getPoints() + "/" + p.isIsOnline();
+            System.out.println("Player 1 :" + result[i]);
         }
         return result;
     }

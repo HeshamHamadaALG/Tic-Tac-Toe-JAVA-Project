@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,8 +7,10 @@ package Network;
 
 import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
+import clientxo.playerForm.playTypeController;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +45,20 @@ public class Client extends Thread {
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
     }
+    
+    public void closeConn(){
+        try{
+            this.input.close();
+            this.socket.close();
+            this.output.close();
+        }
+        catch (IOException ex) {
+            System.out.println("can't close the session");
+          
+        }
+    }
+    
+
 
     public void sendMessage(Message msg) {
         try {
@@ -69,16 +84,24 @@ public class Client extends Thread {
                 if (msg.getType().equals("Login")) {
                     System.out.println(msg.getData()[0]);
                     isLogged = handleLogin(msg);
-                } //sara
+
+                }
+                
+                else if(msg.getType().equals("Signup")){
+                    System.out.println(msg.getData()[0]);
+                    redirectToLogin();
+                }
+                    //sara
                 else if (msg.getType().equals("playRequest")) {                 
                     new FXMLDocumentController().playAccept(msg.getData()[0],msg.getData()[1]);
+                    
                     //playRequest();
                 } else if (msg.getType().equals("play")) {
                      System.out.println(msg.getData()[2]);
                     new FXMLDocumentController().multiGameWindow();
                 }else if(msg.getType().equals("chatting")){
-                   
-                    System.out.println(msg.getData()[3]+": "+msg.getData()[2]);
+
+                    System.out.println(msg.getData()[2]+": "+msg.getData()[1]);
                 } 
                 else if (msg.getType().equals("StartEasyGame")) {
                     new FXMLDocumentController().gameWindow();;
@@ -90,6 +113,7 @@ public class Client extends Thread {
                     handleMove(msg.getType());
                 } else if (msg.getType().startsWith("WIN")) {
                     System.out.println("CONGRATS, YOU WIN");
+
                     new FXMLDocumentController().winAlert("WIN");
 //                    new FXMLDocumentController().singlePlayWindow();
                 } else if (msg.getType().startsWith("LOSE")) {
@@ -196,6 +220,9 @@ public class Client extends Thread {
     public void playRequest() {
         // show pop up to ask user if he wants to play, if he click OK, the client will send a message of type playRequest, and accept data
 
+    }
+     public void redirectToLogin(){
+         new FXMLDocumentController().logInWindow();
     }
 
 }

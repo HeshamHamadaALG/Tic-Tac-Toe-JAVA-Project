@@ -73,6 +73,9 @@ public class playTypeController implements Initializable {
         // Close Window Button
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
         closeStage.close();
+         Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
+        ClientXO.client.closeConn();
     }
 
     @FXML
@@ -98,6 +101,8 @@ public class playTypeController implements Initializable {
         new FXMLDocumentController().listWindow();
         Message msg = new Message("listRequest", new String[]{Integer.toString(ClientXO.getId())});
         ClientXO.client.sendMessage(msg);
+        
+        
         System.out.println("Multi Player Pressed");
 
         //end

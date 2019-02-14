@@ -61,6 +61,10 @@ public class Player {
                 System.out.println("Listening Player");
                 Message msg = (Message) input.readObject();
                 if (msg == null) {
+                    Player.this.isOnline = false;
+                    Player.this.input.close();
+                    Player.this.output.close();
+                    Player.this.socket.close();
                     System.out.println("player is offline");
                     return;
                 }
@@ -93,11 +97,18 @@ public class Player {
                         p1.output.writeObject(rejected);
                     }
                 } else if (msg.getType().equals("chatting")) {
-                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
-                    p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
-                    Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], msg.getData()[2], p1.getNames(), p2.getNames()});
-                    p1.output.writeObject(chat);
-                    p2.output.writeObject(chat);
+                    Player player=null;
+                    player = getPlayer(Integer.parseInt(msg.getData()[0]));
+
+                    MultiGame multiGame = (MultiGame) player.game;
+                    Player opponent = (player == multiGame.p1) ? multiGame.p2 : multiGame.p1;
+                    //p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                    Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], player.getNames(), opponent.getNames()});
+                    player.output.writeObject(chat);
+                    opponent.output.writeObject(chat);
+
+                   
+
                 }
                 if (msg.getType().equals("EasySingle")) {
                     Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
@@ -121,12 +132,15 @@ public class Player {
                     handleMove(msg);
                 }
                 if (msg.getType().equals("listRequest")) {
+
                     Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
+
                     outputMsg = new Message("listResponse", new String[]{});
                     outputMsg.setData(playerListToArray(GameController.players));
                     player.output.writeObject(outputMsg);
                 }
                 //end
+               
             }
         } catch (IOException ex) {
             System.out.println("Player is offline");
@@ -375,6 +389,7 @@ public class Player {
     public void setIsOnline(boolean isOnline) {
         this.isOnline = isOnline;
     }
+   
 
 //        /**
 //         * Accepts notification of who the opponent is.

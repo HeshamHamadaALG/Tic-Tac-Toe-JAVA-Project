@@ -29,10 +29,61 @@ class Client extends Thread {
 
     public void run() {
         int isLogin = -1;
+        boolean isSignup = false;
+        try{
+            
+            Message msg = (Message) input.readObject();
+            System.out.println(msg.getType());
+            if("Login".equals(msg.getType())){
+                isLoggedin(msg, isLogin);
+            }
+            else if("Signup".equals(msg.getType())){
+                isSignedup(msg,isSignup);
+            }
+        }
+        catch (IOException ex) {
+                 System.out.println("client is offline");
+                 return;
+            }
+        catch (ClassNotFoundException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+         
+    }
+    public void isSignedup(Message msg , boolean isSignup){
+         while (isSignup == false) {
+            try {
+                
+                if (msg == null) {
+                    System.out.println("client is offline");
+                    return;
+                }
+                System.out.println(msg.getType());
+                System.out.println(msg.getData()[0] + " " + msg.getData()[1]+ " " + msg.getData()[2]);
+                if ("Signup".equals(msg.getType())) {
+                    isSignup = GameController.dbManger.signUp(msg.getData()[0], msg.getData()[1], msg.getData()[2]);
+                }
+                if (isSignup != false) {
+                     msg = new Message("Signup", new String[]{"Accept",Integer.toString(1)});
+                       output.writeObject(msg);
+                } else {
+                    output.writeObject(new Message("Signup", new String[]{"Wrong"}));
+                    break;
+                }
+                System.out.println(msg.getType());
+            } catch (IOException ex) {
+                 System.out.println("client is offline");
+                
+            } 
+
+        }
+    }
+    public void isLoggedin (Message msg, int isLogin){
+
         while (isLogin == -1) {
             try {
                 
-                Message msg = (Message) input.readObject();
                 if (msg == null) {
                     System.out.println("client is offline");
                     this.input.close();
@@ -54,18 +105,9 @@ class Client extends Thread {
                 System.out.println(msg.getType());
             } catch (IOException ex) {
                  System.out.println("client is offline");
-                try {
-                    this.input.close();
-                    this.output.close();
-                    this.socket.close();
-                } catch (IOException ex1) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex1);
-                }
                  return;
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            } 
+            
         }
     }
 
@@ -88,6 +130,7 @@ class Client extends Thread {
                 
                 //sara to make player online
                 p.isOnline= true;
+
                 // end     
                 p.startThread();
                 try {

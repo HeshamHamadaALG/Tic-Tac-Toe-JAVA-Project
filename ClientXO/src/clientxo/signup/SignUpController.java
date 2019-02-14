@@ -5,6 +5,8 @@
  */
 package clientxo.signup;
 
+import Network.Message;
+import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.URL;
@@ -79,14 +81,16 @@ public class SignUpController implements Initializable {
         
         // We Will Handle Sign Up Validation
 
-//        if (!password.getText().equals(repassword.getText())) {
-//            System.out.println("*Passwords aren't matching");
-//            password.setText("");
-//            repassword.setText("");
-//        } else {
-//            player = new Player(name.getText(), email.getText(), password.getText());
-//            System.out.println("User : " + name.getText() + "  Email : " + email.getText());
-//        }
+        if (!password.getText().equals(repassword.getText())) {
+            System.out.println("*Passwords aren't matching");
+            password.setText("");
+            repassword.setText("");
+        } else {
+            Message msg = new Message("Signup",new String []{name.getText(), password.getText(), email.getText()});
+            ClientXO.client.sendMessage(msg);
+            System.out.println("Signup Pressed and msg sent");
+      
+        }
 
     }
     

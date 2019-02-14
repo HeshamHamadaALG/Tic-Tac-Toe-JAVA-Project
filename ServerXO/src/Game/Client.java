@@ -84,8 +84,7 @@ class Client extends Thread {
             if (p.idnum == id) {
                 p.socket = client.socket;
                 p.output = client.output;
-                p.input = client.input;
-                
+                p.input = client.input;     
                 //sara to make player online
                 p.isOnline= true;
                 // end     

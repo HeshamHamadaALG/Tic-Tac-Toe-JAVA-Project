@@ -74,9 +74,11 @@ private void closeButtonAction(){
 @FXML
 private void sendChat(ActionEvent event){
 //    chatWrite = (TextField) event.getSource();
+        System.out.println(chatWrite.getText());
        // Chat Action Here
       //sara
-        ClientXO.client.sendMessage(new Message("chatting", new String[]{Integer.toString(ClientXO.getId()),  "hello dear"}));
+        ClientXO.client.sendMessage(new Message("chatting", new String[]{Integer.toString(ClientXO.getId()),chatWrite.getText()+"\n"}));
+        chatWrite.setText("");
         //end
 }
 
@@ -165,6 +167,7 @@ private void backAction(ActionEvent event) throws IOException{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        chatArea.setEditable(false);
         System.out.println("You are in MultiPlayer");
             }       
 }

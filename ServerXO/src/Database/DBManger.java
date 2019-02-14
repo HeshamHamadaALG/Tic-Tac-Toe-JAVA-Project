@@ -35,7 +35,7 @@ public class DBManger {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connect = DriverManager
-                    .getConnection("jdbc:mysql://localhost/tictactoe?"
+                    .getConnection("jdbc:mysql://localhost/tiktok?"
                             + "user=root&password=");
              System.out.println("====> DataBase Connected <====");  
             return true;
@@ -59,6 +59,23 @@ public class DBManger {
             ex.printStackTrace();
         }
         return -1;
+    }
+    
+    /**
+     *
+     * @param player
+     * @throws SQLException
+     */
+    public void update(Player player) throws SQLException{
+        try {
+            String query = ("update players set points = ? where id = ?;");
+            PreparedStatement preparedStmt = connect.prepareStatement(query);
+            preparedStmt.setInt   (1, player.getPoints());
+            preparedStmt.setInt   (2, player.getIdnum());
+            preparedStmt.executeUpdate();
+        } catch(Exception ex){
+            
+        }
     }
     
     public ArrayList<Player> loadPlayer (){

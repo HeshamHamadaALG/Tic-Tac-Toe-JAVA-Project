@@ -4,17 +4,24 @@
  * and open the template in the editor.
  */
 package Game;
-
+import Game.SingleGame;
+import Database.DBManger;
+import static Game.GameController.dbManger;
 import Network.Message;
 import SinglePlayer.AI;
 import SinglePlayer.EasyAI;
 import SinglePlayer.HardAI;
 import SinglePlayer.MediumAI;
 import java.io.BufferedReader;
-
 import java.io.*;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -124,6 +131,8 @@ public class Player extends Thread {
             return;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -173,7 +182,7 @@ public class Player extends Thread {
         p2.mark = 'O';
     }
 
-    public void handleMove(Message msg) {
+    public void handleMove(Message msg) throws SQLException, ClassNotFoundException {
         System.out.println("request to " + msg.getType());
         int col = Integer.parseInt(msg.getType().charAt(5) + "");
         int row = Integer.parseInt(msg.getType().charAt(7) + "");
@@ -185,15 +194,36 @@ public class Player extends Thread {
         }
     }
 
-    public void handleSingleGame(Player player, int col, int row) {
+    public void handleSingleGame(Player player, int col, int row) throws SQLException, ClassNotFoundException {
         try {
             SingleGame singleGame = (SingleGame) player.game;
             if (singleGame.legalMove(col, row, player.mark)) {
                 player.output.writeObject(new Message("Move X " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
-                if (singleGame.hasWinner()) {
-                    Thread.sleep(500);
-                    player.output.writeObject(new Message("WIN", new String[]{}));
+                if (singleGame.hasWinner()) { 
+                    //Add Winning Points
+                    if(singleGame.Computer instanceof EasyAI) {
+                        Thread.sleep(500);
+                        player.output.writeObject(new Message("WIN", new String[]{}));
+                        dbManger = new DBManger();
+                        player.setPoints(points+=5);
+                        GameController.dbManger.update(player);
+                    }
+                    if(singleGame.Computer instanceof MediumAI) {
+                        Thread.sleep(500);
+                        player.output.writeObject(new Message("WIN", new String[]{}));
+                        dbManger = new DBManger();
+                        player.setPoints(points+=10);
+                        GameController.dbManger.update(player);
+                    }
+                    if(singleGame.Computer instanceof HardAI) {
+                        Thread.sleep(500);
+                        player.output.writeObject(new Message("WIN", new String[]{}));
+                        dbManger = new DBManger();
+                        player.setPoints(points+=15);
+                        GameController.dbManger.update(player);
+                    }
+                    
                 } else if (singleGame.boardFilledUp()) {
                     Thread.sleep(500);
                     player.output.writeObject(new Message("DRAW", new String[]{}));
@@ -219,7 +249,7 @@ public class Player extends Thread {
         }
     }
 
-    public void handleMultiGame(Player player, int col, int row) {
+    public void handleMultiGame(Player player, int col, int row) throws SQLException {
         try {
             MultiGame multiGame = (MultiGame) player.game;
             Player opponent = (player == multiGame.p1) ? multiGame.p2 : multiGame.p1;
@@ -228,9 +258,14 @@ public class Player extends Thread {
                 opponent.output.writeObject(new Message("Move " + player.mark + " " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
                 if (multiGame.hasWinner()) {
-                    Thread.sleep(500);
-                    player.output.writeObject(new Message("WIN", new String[]{}));
-                    opponent.output.writeObject(new Message("LOSE", new String[]{}));
+                    if(multiGame instanceof MultiGame){
+                        Thread.sleep(500);
+                        player.output.writeObject(new Message("WIN", new String[]{}));
+                        opponent.output.writeObject(new Message("LOSE", new String[]{}));
+                        dbManger = new DBManger();
+                        player.setPoints(points+=10);
+                        GameController.dbManger.update(player);
+                    }
 
                 } else if (multiGame.boardFilledUp()) {
                     Thread.sleep(500);

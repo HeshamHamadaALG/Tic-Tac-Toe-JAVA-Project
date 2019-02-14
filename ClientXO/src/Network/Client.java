@@ -69,6 +69,10 @@ public class Client extends Thread {
                 else if( msg.getType().equals("Hello"))
                     System.out.println("Hello");
                 //end
+                else if(msg.getType().equals("Signup")){
+                    System.out.println(msg.getData()[0]);
+                    redirectToLogin();
+                }
                 //recieve the mesg and redirect 
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,6 +94,9 @@ public class Client extends Thread {
     
     public void multiPlay (){
       new FXMLDocumentController().gameWindow();
+    }
+    public void redirectToLogin(){
+         new FXMLDocumentController().logInWindow();
     }
     
     public void playRequest(){

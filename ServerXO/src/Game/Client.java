@@ -38,17 +38,13 @@ class Client extends Thread {
                 if ("Login".equals(msg.getType())) {
                     isLogin = GameController.dbManger.login(msg.getData()[0], msg.getData()[1]);
                 }
-                if ("Signup".equals(msg.getType())) {
-                    isSignup = GameController.dbManger.signUp(msg.getData()[0], msg.getData()[1], msg.getData()[2]);
-                }
-                System.out.println("signup Result:" + isSignup);
+                
                 System.out.println("Login Result:" + isLogin);
                 if (isLogin != -1) {
                     makePlayerOnline(this, isLogin);
                 } else {
                     output.writeObject(new Message("Login", new String[]{"Wrong"}));
                 }
-                //check ifsignp true sebd mesg to client to redirect to login
                 System.out.println(msg.getType());
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
@@ -57,6 +53,26 @@ class Client extends Thread {
             }
 
         }
+         while (isSignup == false) {
+            try {
+                Message msg = (Message) input.readObject();
+                 if ("Signup".equals(msg.getType())) {
+                    isSignup = GameController.dbManger.signUp(msg.getData()[0], msg.getData()[1], msg.getData()[2]);
+                }
+                 if(isSignup == true){
+                    msg = new Message("Signup", new String[]{"Accept"});
+                    output.writeObject(msg);
+
+                 }
+                System.out.println("signup Result:" + isSignup);
+            }
+             catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            } 
+            catch (ClassNotFoundException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         }
     }
 
     public void makePlayerOnline(Client client, int id){

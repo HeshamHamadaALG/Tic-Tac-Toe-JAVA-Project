@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="ClientXO.jnlp">
   <information>
@@ -9,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="ClientXO.jar" size="356849" download="eager" />
+    <jar href="ClientXO.jar" size="355931" download="eager" />
   </resources>
 <security>
   <all-permissions/>
@@ -20,23 +19,3 @@
   <jfx:javafx-desc  width="800" height="600" main-class="clientxo.ClientXO"  name="ClientXO" />
   <update check="always"/>
 </jnlp>
-=======
-<?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="ClientXO.jnlp">
-  <information>
-    <title>ClientXO</title>
-    <vendor>EgyJuba</vendor>
-    <description>null</description>
-    <offline-allowed/>
-  </information>
-  <resources>
-    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="ClientXO.jar" size="351491" download="eager" />
-  </resources>
-  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="ClientXO" >
-    <param name="requiredFXVersion" value="8.0+"/>
-  </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="clientxo.ClientXO"  name="ClientXO" />
-  <update check="always"/>
-</jnlp>
->>>>>>> 4cc0cc875d78b2aa93ef8fdb6c2f3771db346dee

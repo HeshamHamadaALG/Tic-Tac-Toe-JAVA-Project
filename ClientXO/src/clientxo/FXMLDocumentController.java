@@ -12,11 +12,13 @@ import clientxo.playerForm.playTypeController;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +26,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -49,7 +55,7 @@ public class FXMLDocumentController implements Initializable {
     private void closeButtonAction() {
 
         // Close Window Button
-        Message msg = new Message("close",new String []{});
+        Message msg = new Message("CloseConn",new String []{});
         ClientXO.client.sendMessage(msg);
         ClientXO.client.closeConn();
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
@@ -295,13 +301,53 @@ Switching Scenes
     }
     
     public void alertLogin(){
-           Alert alert = new Alert(Alert.AlertType.INFORMATION);
+           Alert alert = new Alert(Alert.AlertType.WARNING);
            alert.initStyle(StageStyle.UNDECORATED);
            alert.setTitle("Login Alert !!");
+           alert.getDialogPane().setStyle("-fx-background-color:#f4f4f4;");
            alert.setHeaderText(null);
            alert.setContentText("You Entered Wronge UserName Or Password  !!");
            alert.showAndWait();
     }
+    
+    public void winAlert(String state){
+                Platform.runLater(() -> {
+                    Dialog alert = new Dialog();
+                    alert.initStyle(StageStyle.UNDECORATED);
+                    
+                    ButtonType AgainButton= new ButtonType("Again",ButtonData.OK_DONE);
+                    ButtonType CancelButton= new ButtonType("Cancel",ButtonData.OK_DONE);
+                    alert.getDialogPane().getButtonTypes().addAll(AgainButton,CancelButton);
+                    
+                    if(null != state)switch (state) {
+                        case "WIN":
+                            alert.setTitle("You Won !!");
+                            alert.setGraphic(new ImageView(this.getClass().getResource("win.png").toString()));
+                            alert.setContentText("You Won YAAAAY  !!");
+                            break;
+                        case "LOSE":
+                            alert.setTitle("You Lose !!");
+                            alert.setGraphic(new ImageView(this.getClass().getResource("lose.png").toString()));
+                            alert.setContentText("You Lose  :( :( ");
+                            break;
+                        case "DRAW":
+                            alert.setTitle("Game Over !!");
+                            alert.setGraphic(new ImageView(this.getClass().getResource("draw.png").toString()));
+                            alert.setContentText("No Winners Today ");
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                    alert.setHeaderText(null);
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if(result.get() == AgainButton){
+                       new FXMLDocumentController().singlePlayWindow();
+                    } else if(result.get() == CancelButton){
+                       new FXMLDocumentController().playTypeWindow();
+                    }
+                }); }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -81,11 +80,15 @@ class Client extends Thread {
         }
     }
     public void isLoggedin (Message msg, int isLogin){
-         while (isLogin == -1) {
+
+        while (isLogin == -1) {
             try {
                 
                 if (msg == null) {
                     System.out.println("client is offline");
+                    this.input.close();
+                    this.output.close();
+                    this.socket.close();
                     return;
                 }
                 System.out.println(msg.getType());
@@ -104,7 +107,7 @@ class Client extends Thread {
                  System.out.println("client is offline");
                  return;
             } 
-
+            
         }
     }
 
@@ -127,9 +130,9 @@ class Client extends Thread {
                 
                 //sara to make player online
                 p.isOnline= true;
-                // end 
-                
-                p.start();
+
+                // end     
+                p.startThread();
                 try {
                     p.output.writeObject(new Message("Hello",new String[]{}));
                 } catch (IOException ex) {

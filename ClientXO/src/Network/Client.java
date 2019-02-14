@@ -59,9 +59,9 @@ public class Client extends Thread {
     }
     
 
+
     public void sendMessage(Message msg) {
         try {
-             System.out.println("send mesg function client "+msg.getType());
             output.writeObject(msg);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,6 +84,7 @@ public class Client extends Thread {
                 if (msg.getType().equals("Login")) {
                     System.out.println(msg.getData()[0]);
                     isLogged = handleLogin(msg);
+
                 }
                 
                 else if(msg.getType().equals("Signup")){
@@ -91,6 +92,7 @@ public class Client extends Thread {
                     redirectToLogin();
                 }
                     //sara
+
                 else if (msg.getType().equals("playRequest")) {
                     Message message = (new Message("playRequest", new String[]{"accept", msg.getData()[0], msg.getData()[1]}));
                     ClientXO.client.sendMessage(message);
@@ -99,8 +101,8 @@ public class Client extends Thread {
                      System.out.println(msg.getData()[2]);
                     new FXMLDocumentController().multiGameWindow();
                 }else if(msg.getType().equals("chatting")){
-                   
-                    System.out.println(msg.getData()[3]+": "+msg.getData()[2]);
+
+                    System.out.println(msg.getData()[2]+": "+msg.getData()[1]);
                 } 
                 else if (msg.getType().equals("StartEasyGame")) {
                     new FXMLDocumentController().gameWindow();;
@@ -112,13 +114,15 @@ public class Client extends Thread {
                     handleMove(msg.getType());
                 } else if (msg.getType().startsWith("WIN")) {
                     System.out.println("CONGRATS, YOU WIN");
-                    new FXMLDocumentController().singlePlayWindow();
+
+                    new FXMLDocumentController().winAlert("WIN");
+//                    new FXMLDocumentController().singlePlayWindow();
                 } else if (msg.getType().startsWith("LOSE")) {
                     System.out.println("YOU LOSE");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("LOSE");
                 } else if (msg.getType().equals("DRAW")) {
                     System.out.println("DRAW");
-                    new FXMLDocumentController().singlePlayWindow();
+                    new FXMLDocumentController().winAlert("DRAW");
                 }
                 else if(msg.getType().equals("listResponse")){
                     System.out.println("ListPlayerReply");

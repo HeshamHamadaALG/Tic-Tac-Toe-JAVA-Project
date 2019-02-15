@@ -53,101 +53,110 @@ public class Player {
         this.isOnline = false;
     }
 
-    public void startThread(){
-        new Thread(new Runnable(){
-             public void run() {
-        try {
-            while (true) {
-                System.out.println("Listening Player");
-                Message msg = (Message) input.readObject();
-                if (msg == null) {
-                    System.out.println("player is offline");
-                    return;
-                }
-                Player p1 = null;
-                Player p2 = null;
-                Message outputMsg = null;
-                //Sara
-                System.out.println(msg.getType());
-                if (msg.getType().equals("multiPlay")) {
-                    System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
-                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
-                    p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
-                    if (p2.isOnline) {
-                        Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
-                        p2.output.writeObject(playRequest);
-                    }
-                } else if (msg.getType().equals("playRequest")) {
-                    if (msg.getData()[0].equals("accept")) {
-                        p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
-                        p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
-                        if (p1.isOnline && p2.isOnline) {
-                            String senario = GameController.dbManger.getGameBoard(msg);
-                            outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum), senario}));
-                            p1.output.writeObject(outputMsg);
-                            p2.output.writeObject(outputMsg);
-                            intializeMultiGame(p1, p2);
+    public void startThread() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    while (true) {
+                        System.out.println("Listening Player");
+                        Message msg = (Message) input.readObject();
+                        if (msg == null) {
+                            Player.this.isOnline = false;
+                            Player.this.input.close();
+                            Player.this.output.close();
+                            Player.this.socket.close();
+                            broadCastPlayerList();
+                            System.out.println("player is offline");
+                            return;
                         }
-                    } else {
-                        Message rejected = (new Message("reject", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
-                        p1.output.writeObject(rejected);
+                        Player p1 = null;
+                        Player p2 = null;
+                        Message outputMsg = null;
+                        //Sara
+                        System.out.println(msg.getType());
+                        if (msg.getType().equals("multiPlay")) {
+                            System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
+                            p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+                            p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                            if (p2.isOnline) {
+                                Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
+                                p2.output.writeObject(playRequest);
+                            }
+                        } else if (msg.getType().equals("playRequest")) {
+                            if (msg.getData()[0].equals("accept")) {
+                                p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                                p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
+                                if (p1.isOnline && p2.isOnline) {
+                                    String senario = GameController.dbManger.getGameBoard(msg);
+                                    outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum), senario}));
+                                    p1.output.writeObject(outputMsg);
+                                    p2.output.writeObject(outputMsg);
+                                    intializeMultiGame(p1, p2);
+                                }
+                            } else {
+                                Message rejected = (new Message("reject", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
+                                p1.output.writeObject(rejected);
+                            }
+                        } else if (msg.getType().equals("chatting")) {
+                            Player player = null;
+                            player = getPlayer(Integer.parseInt(msg.getData()[0]));
+
+                            MultiGame multiGame = (MultiGame) player.game;
+                            Player opponent = (player == multiGame.p1) ? multiGame.p2 : multiGame.p1;
+                            //p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                            Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], player.getNames(), opponent.getNames()});
+                            player.output.writeObject(chat);
+                            opponent.output.writeObject(chat);
+                        }
+                        if (msg.getType().equals("EasySingle")) {
+                            Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
+                            player.output.writeObject(new Message("StartEasyGame", new String[]{}));
+                            intializeSingleGame(player, new EasyAI());
+                            System.out.println("StartEasyGame :" + msg.getData()[0]);
+                        }
+                        if (msg.getType().equals("MediumSingle")) {
+                            Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
+                            player.output.writeObject(new Message("StartMediumGame", new String[]{}));
+                            intializeSingleGame(player, new MediumAI());
+                            System.out.println("StartMediumGame : " + msg.getData()[0]);
+                        }
+                        if (msg.getType().equals("HardSingle")) {
+                            Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
+                            player.output.writeObject(new Message("StartHardGame", new String[]{}));
+                            intializeSingleGame(player, new HardAI());
+                            System.out.println("StartHardGame : " + msg.getData()[0]);
+                        }
+                        if (msg.getType().startsWith("Move")) {
+                            handleMove(msg);
+                        }
+                        if (msg.getType().equals("listRequest")) {
+                            Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
+                            outputMsg = new Message("listResponse", new String[]{});
+                            outputMsg.setData(playerListToArray(GameController.players));
+                            player.output.writeObject(outputMsg);
+                        }
+                        //end
+
                     }
-                } else if (msg.getType().equals("chatting")) {
-                    Player player=null;
-                    player = getPlayer(Integer.parseInt(msg.getData()[0]));
-
-                    MultiGame multiGame = (MultiGame) player.game;
-                    Player opponent = (player == multiGame.p1) ? multiGame.p2 : multiGame.p1;
-                    //p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
-                    Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], player.getNames(), opponent.getNames()});
-                    player.output.writeObject(chat);
-                    opponent.output.writeObject(chat);
-
-                   
-
+                } catch (IOException ex) {
+                    try {
+                        System.out.println("Player is offline");
+                        broadCastPlayerList();
+                        Player.this.isOnline = false;
+                        Player.this.input.close();
+                        Player.this.output.close();
+                        Player.this.socket.close();
+                        return;
+                    } catch (IOException ex1) {
+                        Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (msg.getType().equals("EasySingle")) {
-                    Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
-                    player.output.writeObject(new Message("StartEasyGame", new String[]{}));
-                    intializeSingleGame(player, new EasyAI());
-                    System.out.println("StartEasyGame :" + msg.getData()[0]);
-                }
-                if (msg.getType().equals("MediumSingle")) {
-                    Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
-                    player.output.writeObject(new Message("StartMediumGame", new String[]{}));
-                    intializeSingleGame(player, new MediumAI());
-                    System.out.println("StartMediumGame : " + msg.getData()[0]);
-                }
-                if (msg.getType().equals("HardSingle")) {
-                    Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
-                    player.output.writeObject(new Message("StartHardGame", new String[]{}));
-                    intializeSingleGame(player, new HardAI());
-                    System.out.println("StartHardGame : " + msg.getData()[0]);
-                }
-                if (msg.getType().startsWith("Move")) {
-                    handleMove(msg);
-                }
-                if (msg.getType().equals("listRequest")) {
-
-                    Player player = getPlayer(Integer.parseInt(msg.getData()[0]));
-
-                    outputMsg = new Message("listResponse", new String[]{});
-                    outputMsg.setData(playerListToArray(GameController.players));
-                    player.output.writeObject(outputMsg);
-                }
-                //end
             }
-        } catch (IOException ex) {
-            System.out.println("Player is offline");
-            return;
-    }            catch (ClassNotFoundException ex) {
-                     Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-        }
         }).start();
 
     }
-   
 
     public void handleMultiplayer(Message msg) {
         ArrayList<Player> players = GameController.players;
@@ -205,6 +214,24 @@ public class Player {
         } else {
             handleMultiGame(player, col, row);
         }
+    }
+
+    public void broadCastPlayerList() {
+        ArrayList<Player> players = GameController.players;
+        int listSize = players.size();
+        for (int i = 0; i < listSize; i++) {
+            Player p = players.get(i);
+            if (p.isOnline && p.socket != null) {
+                Message msg = new Message("listResponse", new String[]{});
+                msg.setData(playerListToArray(GameController.players));
+                try {
+                    p.output.writeObject(msg);
+                } catch (IOException ex) {
+                    System.out.println("Can't Send The List");
+                }
+            }
+        }
+
     }
 
     public void handleSingleGame(Player player, int col, int row) {

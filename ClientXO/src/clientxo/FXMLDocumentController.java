@@ -5,8 +5,12 @@
  */
 package clientxo;
 
+import Network.Client;
+import Network.Message;
+import static clientxo.ClientXO.client;
 import clientxo.playerForm.playTypeController;
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -51,6 +55,9 @@ public class FXMLDocumentController implements Initializable {
     private void closeButtonAction() {
 
         // Close Window Button
+        Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
+        ClientXO.client.closeConn();
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
         closeStage.close();
     }

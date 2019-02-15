@@ -73,6 +73,9 @@ public class playTypeController implements Initializable {
         // Close Window Button
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
         closeStage.close();
+         Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
+        ClientXO.client.closeConn();
     }
 
     @FXML

@@ -48,6 +48,8 @@ public class ListController implements Initializable {
     private TableColumn<Player, Integer> tblScore;
     @FXML
     private TableView<Player> tableScores;
+    
+    public static int idOfOpponent;
 
     public ListController() {
         this.tableScores = new TableView<>();
@@ -79,13 +81,31 @@ public class ListController implements Initializable {
         tblNames.setCellValueFactory(new PropertyValueFactory<>("names"));
         tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
         tableScores.setOnMouseClicked((MouseEvent click) -> {
+          
+
+
           if (click.getClickCount() == 2) {
               tableScores.getSelectionModel().getSelectedItem();
-              int idOfOpponent = ((Player) tableScores.getSelectionModel().getSelectedItem()).getIdnum();
+              idOfOpponent = ((Player) tableScores.getSelectionModel().getSelectedItem()).getIdnum();
+              System.out.println("ID OF Opponent "+idOfOpponent);
               Message msg = new Message("multiPlay", new String[]{Integer.toString(ClientXO.getId()),Integer.toString(idOfOpponent)});
               ClientXO.client.sendMessage(msg);
+//              setIdOfOpponent(idOfOpponent);
+              String user = ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames();
               System.out.println("You Clicked Player : " + ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames());
+              
+              new FXMLDocumentController().requestSent(user);
           }
-      });
+      }); 
+        
     }
+
+    public static int getIdOfOpponent() {
+        return idOfOpponent;
+    }
+
+    public void setIdOfOpponent(int idOfOpponent) {
+        this.idOfOpponent = idOfOpponent;
+    }
+
 }

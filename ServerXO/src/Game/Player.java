@@ -62,9 +62,11 @@ public class Player {
                         Message msg = (Message) input.readObject();
                         if (msg == null) {
                             Player.this.isOnline = false;
-                            Player.this.input.close();
-                            Player.this.output.close();
-                            Player.this.socket.close();
+                            if (!Player.this.socket.isClosed()) {
+//                                Player.this.input.close();
+//                                Player.this.output.close();
+                                Player.this.socket.close();
+                            }
                             broadCastPlayerList();
                             System.out.println("player is offline");
                             return;
@@ -140,12 +142,14 @@ public class Player {
                     }
                 } catch (IOException ex) {
                     try {
-                        System.out.println("Player is offline");
+                        System.out.println("Player is offline catch");
                         broadCastPlayerList();
                         Player.this.isOnline = false;
-                        Player.this.input.close();
-                        Player.this.output.close();
-                        Player.this.socket.close();
+                        if (!Player.this.socket.isClosed()) {
+//                            Player.this.input.close();
+//                            Player.this.output.close();
+                            Player.this.socket.close();
+                        }
                         return;
                     } catch (IOException ex1) {
                         Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex1);

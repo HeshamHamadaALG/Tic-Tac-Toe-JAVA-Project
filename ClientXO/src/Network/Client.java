@@ -85,7 +85,6 @@ public class Client extends Thread {
                 if (msg.getType().equals("Login")) {
                     System.out.println(msg.getData()[0]);
                     isLogged = handleLogin(msg);
-
                 }
                 
                 else if(msg.getType().equals("Signup")){
@@ -93,10 +92,9 @@ public class Client extends Thread {
                     redirectToLogin();
                 }
                     //sara
-
-                else if (msg.getType().equals("playRequest")) {
-                    Message message = (new Message("playRequest", new String[]{"accept", msg.getData()[0], msg.getData()[1]}));
-                    ClientXO.client.sendMessage(message);
+                else if (msg.getType().equals("playRequest")) {                 
+                    new FXMLDocumentController().playAccept(msg.getData()[0],msg.getData()[1]);
+                    
                     //playRequest();
                 } else if (msg.getType().equals("play")) {
                     System.out.println(msg.getData()[2]);

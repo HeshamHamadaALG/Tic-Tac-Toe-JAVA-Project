@@ -145,6 +145,8 @@ private void Btn9(ActionEvent e){
 private void backAction(ActionEvent event) throws IOException{
     new FXMLDocumentController().playTypeWindow();
         System.out.println("Back Pressed");
+         Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
 }
 
     @Override

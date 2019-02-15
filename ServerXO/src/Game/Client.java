@@ -66,9 +66,10 @@ class Client extends Thread {
             if (isSignup != false) {
                 msg = new Message("Signup", new String[]{"Accept", Integer.toString(1)});
                 output.writeObject(msg);
-            } else {
-                output.writeObject(new Message("Signup", new String[]{"Wrong"}));
-//                    break;
+           } else {
+                msg = new Message("Signup", new String[]{"Wrong", Integer.toString(1)});
+                output.writeObject(msg);
+              
             }
             System.out.println(msg.getType());
         } catch (IOException ex) {

@@ -7,6 +7,7 @@ import SinglePlayer.EasyAI;
 import SinglePlayer.HardAI;
 import SinglePlayer.MediumAI;
 import java.io.BufferedReader;
+import java.util.Arrays;
 
 import java.io.*;
 import java.io.PrintWriter;
@@ -56,36 +57,35 @@ public class Player {
         this.isOnline = false;
     }
 
-    public void startThread() {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    while (true) {
-                        System.out.println("Listening Player");
-                        Message msg = (Message) input.readObject();
-                        if (msg == null) {
-                            Player.this.isOnline = false;
-                            if (!Player.this.socket.isClosed()) {
-//                                Player.this.input.close();
-//                                Player.this.output.close();
-                                Player.this.socket.close();
-                            }
-                            broadCastPlayerList();
-                            System.out.println("player is offline");
-                            return;
-                        }
-                        Player p1 = null;
-                        Player p2 = null;
-                        Message outputMsg = null;
-                        //Sara
-                        System.out.println(msg.getType());
-                        if (msg.getType().equals("multiPlay")) {
-                            System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
-                            p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
-                            p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
-                            if (p2.isOnline) {
-                                Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
-                                p2.output.writeObject(playRequest);
+
+    public void startThread(){
+        new Thread(new Runnable(){
+             public void run() {
+        try {
+            while (true) {
+                System.out.println("Listening Player");
+                Message msg = (Message) input.readObject();
+                if (msg == null) {       
+                    Player.this.isOnline = false;
+                    Player.this.input.close();
+                    Player.this.output.close();
+                    Player.this.socket.close();                   
+                    System.out.println("player is offline");
+                    return;
+                }
+                Player p1 = null;
+                Player p2 = null;
+                Message outputMsg = null;
+                //Sara
+                System.out.println(msg.getType());
+                if (msg.getType().equals("multiPlay")) {
+                    System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
+                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+                    p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                    if (p2.isOnline) {
+                        Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
+                        p2.output.writeObject(playRequest);
+
                             }
                         } else if (msg.getType().equals("playRequest")) {
                             if (msg.getData()[0].equals("accept")) {
@@ -297,6 +297,46 @@ public class Player {
                 player.output.writeObject(new Message("Move " + player.mark + " " + col + " " + row, new String[]{}));
                 opponent.output.writeObject(new Message("Move " + player.mark + " " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
+                System.out.println("player : " + player.idnum + player.mark +" opponent : "+ opponent.idnum + opponent.mark );
+
+                try{
+                    Message msg = (Message) input.readObject();
+                    if (msg == null || msg.getType().equals("CloseConn") ) {
+                        int x, o;
+                        if(player.mark == 'X'){
+                             x = player.idnum;
+                             o = opponent.idnum;
+                        }
+                        else {
+                            o = player.idnum;
+                            x= opponent.idnum;
+                        }
+//                     System.out.println("player : " + player.idnum + player.mark +" opponent : "+ opponent.idnum + opponent.mark );
+                       System.out.println("x :" +x+ " o: "+o );
+                       System.out.println(Arrays.toString(player.game.board));
+
+                      boolean senario = GameController.dbManger.setGame(x, o, Arrays.toString(player.game.board));
+                      System.out.println(senario);
+                      Player.this.isOnline = false;
+                       Player.this.input.close();
+                       Player.this.output.close();
+                       Player.this.socket.close();
+
+                       System.out.println("player is offline");
+
+
+
+                   }
+                }
+                catch (IOException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+      
+               
+                            
+                    
                 if (multiGame.hasWinner()) {
                     if (multiGame instanceof MultiGame) {
                         Thread.sleep(500);

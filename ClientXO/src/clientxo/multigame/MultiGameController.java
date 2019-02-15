@@ -67,8 +67,11 @@ public class MultiGameController implements Initializable {
 private void closeButtonAction(){
         
         // Close Window Button
+        Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
+        ClientXO.client.closeConn();
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
-        closeStage.close();    
+        closeStage.close();
 }
 
 @FXML

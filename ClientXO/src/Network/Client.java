@@ -87,7 +87,7 @@ public class Client extends Thread {
                 
                 else if(msg.getType().equals("Signup")){
                     System.out.println(msg.getData()[0]);
-                    redirectToLogin();
+                    handleSignup(msg);
                 }
                     //sara
                 else if (msg.getType().equals("playRequest")) {                 
@@ -232,5 +232,15 @@ public class Client extends Thread {
      public void redirectToLogin(){
          new FXMLDocumentController().logInWindow();
     }
-
+ public boolean handleSignup(Message msg) {
+        if (msg.getData()[0].equals("Accept")) {
+           redirectToLogin();
+           return true;
+        }
+        else{
+        Platform.runLater(()
+                -> new FXMLDocumentController().alertSignUpUsername());
+        return false;
+        }
+    }
 }

@@ -64,20 +64,53 @@ public class DBManger {
     }
     public boolean signUp(String name, String password,String email) {
         try {
-            //check email and  username
-            
+            String queryst;
+            //check  username
             statement = connect.createStatement();
-            String queryst = new String("insert into players (name,password,email) values( '"+name+"', '"+password+"','"+email+"') ;");
-//            resultSet = statement.executeUpdate(queryst);
-            statement.executeUpdate(queryst);
+             queryst = "select * from players where name = '"+name+"' ;";
+            resultSet = statement.executeQuery(queryst);
+            if (resultSet.next()) {
+                return false;
+            }
+            else{
+                 queryst = "insert into players (name,password,email) values( '"+name+"', '"+password+"','"+email+"') ;";
+    //            resultSet = statement.executeUpdate(queryst);
+                statement.executeUpdate(queryst);
+
+                return true;
+            }
             
-            return true;
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
         
     }    
+    public boolean setGame(int x , int o, String senario){
+       
+        
+         try{
+             String queryst;
+             statement = connect.createStatement();
+              queryst = "select * from game where x_user = "+ x +" and o_user = "+o+" and  senario = '"+ senario+"'";
+            resultSet = statement.executeQuery(queryst);
+            if (resultSet.next()) {
+                 return true;
+            }
+            else{
+                queryst = "insert into game (x_user,o_user,senario) values("+x+",'"+o+"','"+senario+"')";
+                statement.executeUpdate(queryst);
+                return true;
+            }
+            
+           
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
     /**
      *
      * @param player

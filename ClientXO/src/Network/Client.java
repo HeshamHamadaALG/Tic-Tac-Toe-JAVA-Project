@@ -7,10 +7,8 @@ package Network;
 
 import clientxo.ClientXO;
 import clientxo.FXMLDocumentController;
-import clientxo.playerForm.playTypeController;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -209,7 +207,7 @@ public class Client extends Thread {
             p.setIdnum(Integer.parseInt(st.nextToken()));
             p.setNames(st.nextToken());
             p.setPoints(Integer.parseInt(st.nextToken()));
-//            p.setIsOnline(Boolean.valueOf(st.nextToken()));
+            p.setIsOnline(Boolean.valueOf(st.nextToken()));
             playerList.add(p);
             System.out.println(p.getIdnum() + " " + p.getNames() + " " + p.getPoints() + " " + p.isIsOnline());
         }

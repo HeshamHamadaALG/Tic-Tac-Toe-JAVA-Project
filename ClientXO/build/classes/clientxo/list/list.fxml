@@ -35,7 +35,7 @@
             <TableColumn fx:id="tblId" editable="false" prefWidth="47.200042724609375" text="ID" />
             <TableColumn fx:id="tblNames" editable="false" prefWidth="216.80005645751953" text="Name" />
             <TableColumn fx:id="tblScore" prefWidth="124.7999267578125" text="Score" />
-            <TableColumn prefWidth="99.99990844726562" text="On/Off" />
+            <TableColumn fx:id="stateplay" prefWidth="99.99990844726562" text="On/Off" />
          </columns>
       </TableView>
       <Text fill="WHITE" layoutX="125.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Player" textAlignment="CENTER" wrappingWidth="318.13671875">

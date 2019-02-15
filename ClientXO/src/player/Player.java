@@ -1,8 +1,6 @@
 package player;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import javafx.scene.text.Text;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,6 +17,7 @@ public class Player {
     String names;
     int points;
     boolean isOnline;
+    Text online;
 
 
      public Player() {
@@ -63,6 +62,20 @@ public class Player {
 
     public void setIsOnline(boolean isOnline) {
         this.isOnline = isOnline;
+    }
+
+    public Text getOnline() {
+        if(isOnline == true){
+              online = new Text("Online");
+              online.setStyle("-fx-fill: green; -fx-font-weight: bold;");
+        } else if(isOnline == false){
+              online = new Text("Offline");
+              online.setStyle("-fx-fill: red; -fx-font-weight: bold;");        }
+        return online;
+    }
+
+    public void setOnline(Text online) {
+        this.online = online;
     }
 
 }

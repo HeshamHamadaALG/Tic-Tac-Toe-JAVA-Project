@@ -10,18 +10,11 @@ import Game.GameController;
 import Game.Player;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -31,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -62,6 +56,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableView<Player> tableScores;
     @FXML
+    private TableColumn<Player, Text> stateplay;
+
+    @FXML
     Image imgPlace;
     DBManger db = new DBManger();
     GameController gc;
@@ -73,6 +70,7 @@ public class FXMLDocumentController implements Initializable {
         this.tblId = new TableColumn();
         this.tblNames = new TableColumn();
         this.tblScore = new TableColumn();
+        this.stateplay = new TableColumn();
         usersList = FXCollections.observableArrayList();
     }
 
@@ -155,6 +153,7 @@ public class FXMLDocumentController implements Initializable {
         tblId.setCellValueFactory(new PropertyValueFactory<>("idnum"));
         tblNames.setCellValueFactory(new PropertyValueFactory<>("names"));
         tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
+        stateplay.setCellValueFactory(new PropertyValueFactory<>("online"));
         // add Event Listener To table List  
 //       Add it to Client List Table
 

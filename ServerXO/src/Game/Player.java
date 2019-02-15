@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.text.Text;
 
 /**
  * ok
@@ -34,6 +35,8 @@ public class Player {
     String names;
     int points;
     boolean isOnline;
+    Text online;
+
 
     /**
      * Constructs a handler thread for a given socket and mark initializes the
@@ -421,6 +424,20 @@ public class Player {
 //         */
     public void setOpponent(Player opponent) {
         this.opponent = opponent;
+    }
+    
+    public Text getOnline() {
+        if(isOnline == true){
+              online = new Text("Online");
+              online.setStyle("-fx-fill: green; -fx-font-weight: bold;");
+        } else if(isOnline == false){
+              online = new Text("Offline");
+              online.setStyle("-fx-fill: red; -fx-font-weight: bold;");        }
+        return online;
+    }
+
+    public void setOnline(Text online) {
+        this.online = online;
     }
 //
 }

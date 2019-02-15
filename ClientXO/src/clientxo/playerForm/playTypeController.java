@@ -14,17 +14,11 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import player.Player;
 
 /**
@@ -35,6 +29,12 @@ public class playTypeController implements Initializable {
 
     @FXML
     private Label label;
+    @FXML 
+    Player player;
+    
+    
+//    public static Text playerName = new Text();
+    
 
     @FXML
     private Button closeBtn, loginBtn, minBtn;
@@ -109,13 +109,19 @@ public class playTypeController implements Initializable {
     }
 
     @FXML
-    private void backAction(ActionEvent event) throws IOException {
+    private void LogOutAction(ActionEvent event) throws IOException {
         new FXMLDocumentController().mainWindow();
         System.out.println("Back Pressed");
     }
+        
+       
+
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) { 
+        
     }
+
+
 
 }

@@ -310,6 +310,26 @@ Switching Scenes
            alert.showAndWait();
     }
     
+    public void alertEmail(){
+           Alert alert = new Alert(Alert.AlertType.WARNING);
+           alert.initStyle(StageStyle.UNDECORATED);
+           alert.setTitle("Email Alert !!");
+           alert.getDialogPane().setStyle("-fx-background-color:#f4f4f4;");
+           alert.setHeaderText(null);
+           alert.setContentText("Please Enter Valid Email!!");
+           alert.showAndWait();
+    }
+    
+        public void alertSignUp(){
+           Alert alert = new Alert(Alert.AlertType.WARNING);
+           alert.initStyle(StageStyle.UNDECORATED);
+           alert.setTitle("SignUp Alert !!");
+           alert.getDialogPane().setStyle("-fx-background-color:#f4f4f4;");
+           alert.setHeaderText(null);
+           alert.setContentText("ERROR : *Passwords aren't matching  !!");
+           alert.showAndWait();
+    }
+    
     public void winAlert(String state){
                 Platform.runLater(() -> {
                     Dialog alert = new Dialog();

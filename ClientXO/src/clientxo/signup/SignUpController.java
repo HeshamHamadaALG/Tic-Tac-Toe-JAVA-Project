@@ -11,18 +11,15 @@ import clientxo.FXMLDocumentController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import player.Player;
 //import player.Player;
@@ -41,7 +38,7 @@ public class SignUpController implements Initializable {
     @FXML
     public Label passerror, repasserror;
     @FXML
-    public TextField name, email;
+    public  TextField name, email;
     @FXML
     public PasswordField password, repassword;
 
@@ -72,6 +69,15 @@ public class SignUpController implements Initializable {
         new FXMLDocumentController().logInWindow();
         System.out.println("Login Pressed");
     }
+    
+    
+    // Email validation
+    public boolean valEmail(String email){
+        String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = emailPat.matcher(email);
+        return matcher.find();
+    }
 
     @FXML
     private void signAction() throws IOException {
@@ -83,13 +89,17 @@ public class SignUpController implements Initializable {
 
         if (!password.getText().equals(repassword.getText())) {
             System.out.println("*Passwords aren't matching");
+            new FXMLDocumentController().alertSignUp();
             password.setText("");
             repassword.setText("");
+        } else if(!valEmail(email.getText())){
+            new FXMLDocumentController().alertEmail();
+            System.out.println("Plz Enter Valid Email");
         } else {
             Message msg = new Message("Signup",new String []{name.getText(), password.getText(), email.getText()});
             ClientXO.client.sendMessage(msg);
             System.out.println("Signup Pressed and msg sent");
-      
+
         }
 
     }

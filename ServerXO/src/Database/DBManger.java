@@ -90,17 +90,28 @@ public class DBManger {
        
         
          try{
-             String queryst;
-             statement = connect.createStatement();
-              queryst = "select * from game where x_user = "+ x +" and o_user = "+o+" and  senario = '"+ senario+"'";
+            String queryst;
+            statement = connect.createStatement();
+            queryst = "select * from game where x_user = "+ x +" and o_user = "+o+" and  senario = '"+ senario+"'";
             resultSet = statement.executeQuery(queryst);
             if (resultSet.next()) {
-                 return true;
+                return true;
             }
             else{
-                queryst = "insert into game (x_user,o_user,senario) values("+x+",'"+o+"','"+senario+"')";
-                statement.executeUpdate(queryst);
-                return true;
+                String queryst2 = "select * from game where x_user = "+ x +" and o_user = "+o+" ";
+                resultSet = statement.executeQuery(queryst2);
+                if(resultSet.next()){
+                    String query = ("update game set senario ='"+senario+"'  where x_user = "+ x +" and o_user = "+o+" ;");
+                    statement.executeUpdate(query);
+                    return true;
+                    
+                }
+                else{
+                    queryst = "insert into game (x_user,o_user,senario) values("+x+",'"+o+"','"+senario+"')";
+                    statement.executeUpdate(queryst);
+                    return true;
+                }
+                
             }
             
            

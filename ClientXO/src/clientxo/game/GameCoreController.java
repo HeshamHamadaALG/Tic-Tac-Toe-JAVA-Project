@@ -61,8 +61,11 @@ public class GameCoreController implements Initializable {
 private void closeButtonAction(){
         
         // Close Window Button
+       Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
+        ClientXO.client.closeConn();
         Stage closeStage = (Stage) closeBtn.getScene().getWindow();
-        closeStage.close();    
+        closeStage.close();  
 }
 @FXML
 public Image CountPlayer(){
@@ -143,10 +146,12 @@ private void Btn9(ActionEvent e){
 
 @FXML
 private void backAction(ActionEvent event) throws IOException{
-    new FXMLDocumentController().playTypeWindow();
-        System.out.println("Back Pressed");
-         Message msg = new Message("CloseConn",new String []{});
+    Message msg = new Message("CloseConn",new String []{});
         ClientXO.client.sendMessage(msg);
+        new FXMLDocumentController().playTypeWindow();
+        System.out.println("Back Pressed");
+         
+      
 }
 
     @Override

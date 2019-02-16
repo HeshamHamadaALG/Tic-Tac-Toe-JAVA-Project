@@ -5,10 +5,13 @@
  */
 package clientxo.playerForm;
 
+import Network.Client;
 import Network.Message;
 import clientxo.ClientXO;
+import static clientxo.ClientXO.client;
 import clientxo.FXMLDocumentController;
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -110,7 +113,21 @@ public class playTypeController implements Initializable {
 
     @FXML
     private void LogOutAction(ActionEvent event) throws IOException {
-        new FXMLDocumentController().mainWindow();
+          Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
+        ClientXO.client.closeConn();
+       try {
+            // TODO
+            client = new Client(new Socket("localhost", 8901));
+            client.start();
+            System.out.println("Client Connect to Server");
+        } catch (IOException ex) {
+            System.out.println("Client => No Connect ");
+//            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+             
+        ClientXO.client.redirectToLogin();
+//        new FXMLDocumentController().mainWindow();
         System.out.println("Back Pressed");
     }
         

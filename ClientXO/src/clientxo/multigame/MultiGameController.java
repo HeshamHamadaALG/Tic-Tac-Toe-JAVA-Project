@@ -163,6 +163,8 @@ private void Btn9(ActionEvent e){
 
 @FXML
 private void backAction(ActionEvent event) throws IOException{
+    Message msg = new Message("CloseConn",new String []{});
+        ClientXO.client.sendMessage(msg);
     new FXMLDocumentController().listWindow();
         System.out.println("Back Pressed");
 }

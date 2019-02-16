@@ -14,13 +14,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import player.Player;
 
@@ -34,10 +32,6 @@ public class playTypeController implements Initializable {
     private Label label;
     @FXML 
     Player player;
-    
-    
-//    public static Text playerName = new Text();
-    
 
     @FXML
     private Button closeBtn, loginBtn, minBtn;
@@ -45,31 +39,6 @@ public class playTypeController implements Initializable {
     private double x = 0;
     private double y = 0;
 
-//public playTypeController(){
-//            Platform.runLater(() -> {
-//            try {
-//                Parent SingleView = FXMLLoader.load(getClass().getResource("./playType.fxml"));
-//                Scene SingleScene = new Scene(SingleView);
-//                Stage singlewindow = ClientXO.getGlobalStage();
-//
-//                // to make the stage movable
-//                SingleView.setOnMousePressed((MouseEvent e) -> {
-//                    x = e.getSceneX();
-//                    y = e.getSceneY();
-//                });
-//                SingleView.setOnMouseDragged((MouseEvent e) -> {
-//                    singlewindow.setX(e.getScreenX() - x);
-//                    singlewindow.setY(e.getScreenY() - y);
-//                });
-//
-//                singlewindow.setScene(SingleScene);
-//                singlewindow.show();
-//            } catch (IOException ex) {
-//                System.out.println("error");
-//                //Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        });
-//}
     @FXML
     private void closeButtonAction() {
 
@@ -99,12 +68,11 @@ public class playTypeController implements Initializable {
     private void MultiButtonAction(ActionEvent event) throws IOException {
 
         //sara 
-//         Message msg = new Message("multiPlay",new String []{Integer.toString(ClientXO.getId()),"2"});
-//         ClientXO.client.sendMessage(msg);
+
         new FXMLDocumentController().listWindow();
         System.out.println("Multi Player Pressed");
 
-        //end
+
     }
 
     @FXML
@@ -134,7 +102,5 @@ public class playTypeController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         
     }
-
-
 
 }

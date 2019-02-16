@@ -106,9 +106,7 @@ public class Client extends Thread {
                     handleMove(msg.getType());
                 } else if (msg.getType().startsWith("WIN")) {
                     System.out.println("CONGRATS, YOU WIN");
-
                     new FXMLDocumentController().winAlert("WIN");
-//                    new FXMLDocumentController().singlePlayWindow();
                 } else if (msg.getType().startsWith("LOSE")) {
                     System.out.println("YOU LOSE");
                     new FXMLDocumentController().winAlert("LOSE");
@@ -120,6 +118,7 @@ public class Client extends Thread {
                     fillPlayerList(msg.getData());
                 }
                 else if(msg.getType().equals("OpponentLeft")){
+                    new FXMLDocumentController().noConnect();
                     System.out.println("OpponentLeft");
                 }
 
@@ -181,9 +180,8 @@ public class Client extends Thread {
     }
 
     public void multiPlay() {
-        System.out.println("You choose Multi = Before");
         new FXMLDocumentController().listWindow();
-        System.out.println("You choose Multi = After");
+        System.out.println("You choose MultiGame");
     }
 
     public void fillPlayerList(String[] players) {

@@ -8,10 +8,6 @@ package clientxo.multigame;
 
 import Network.Message;
 import clientxo.ClientXO;
-import clientxo.FXMLDocumentController;
-//import java.awt.TextArea;
-//import java.awt.TextField;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -21,11 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import player.Player;
 
 
 /**
@@ -161,13 +154,6 @@ private void Btn9(ActionEvent e){
         System.out.println("Cell 9 clcicked");
 }
 
-@FXML
-private void backAction(ActionEvent event) throws IOException{
-    Message msg = new Message("CloseConn",new String []{});
-        ClientXO.client.sendMessage(msg);
-    new FXMLDocumentController().listWindow();
-        System.out.println("Back Pressed");
-}
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

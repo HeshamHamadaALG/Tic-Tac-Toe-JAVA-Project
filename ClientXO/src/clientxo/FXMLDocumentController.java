@@ -5,12 +5,10 @@
  */
 package clientxo;
 
-import Network.Client;
 import Network.Message;
-import static clientxo.ClientXO.client;
+import clientxo.game.GameCoreController;
 import clientxo.playerForm.playTypeController;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -18,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -50,6 +47,7 @@ public class FXMLDocumentController implements Initializable {
     private double x = 0;
     private double y = 0;
     public  playTypeController ptController;
+    public static String currentFXML;
 //    public  GameCoreController crController;
     @FXML
     private void closeButtonAction() {
@@ -97,7 +95,8 @@ Switching Scenes
                 Parent SignupView = FXMLLoader.load(getClass().getResource("./signup/signup.fxml"));
                 Scene SignupScene = new Scene(SignupView);
                 Stage signupwindow = ClientXO.getGlobalStage();
-
+                currentFXML = "signup";
+                
                 // to make the stage movable
                 SignupView.setOnMousePressed((MouseEvent e) -> {
                     x = e.getSceneX();
@@ -123,7 +122,7 @@ Switching Scenes
                 Parent loginView = FXMLLoader.load(getClass().getResource("./login/login.fxml"));
                 Scene loginScene = new Scene(loginView);
                 Stage loginwindow = ClientXO.getGlobalStage();
-
+                
                 // to make the stage movable
                 loginView.setOnMousePressed((MouseEvent e) -> {
                     x = e.getSceneX();
@@ -201,7 +200,7 @@ Switching Scenes
                 Parent SingleView = FXMLLoader.load(getClass().getResource("./game/GameCore.fxml"));
                 Scene SingleScene = new Scene(SingleView);
                 Stage singlewindow = ClientXO.getGlobalStage();
-
+                currentFXML = "GameCore";
                 // to make the stage movable
                 SingleView.setOnMousePressed((MouseEvent e) -> {
                     x = e.getSceneX();
@@ -255,7 +254,7 @@ Switching Scenes
                 Parent MultiView = FXMLLoader.load(getClass().getResource("./multigame/MultiGame.fxml"));
                 Scene MultiScene = new Scene(MultiView);
                 Stage Multiwindow = ClientXO.getGlobalStage();
-
+                currentFXML = "MultiGame";
                 // to make the stage movable
                 MultiView.setOnMousePressed((MouseEvent e) -> {
                     x = e.getSceneX();
@@ -329,7 +328,8 @@ Switching Scenes
            alert.setContentText("ERROR : *Passwords aren't matching  !!");
            alert.showAndWait();
     }
-              public void alertSignUpUsername(){
+        
+           public void alertSignUpUsername(){
            Alert alert = new Alert(Alert.AlertType.WARNING);
            alert.initStyle(StageStyle.UNDECORATED);
            alert.setTitle("SignUp Alert !!");
@@ -339,41 +339,51 @@ Switching Scenes
            alert.showAndWait();
     }
     public void winAlert(String state){
-                Platform.runLater(() -> {
-                    Dialog alert = new Dialog();
-                    alert.initStyle(StageStyle.UNDECORATED);
-                    
-                    ButtonType AgainButton= new ButtonType("Again",ButtonData.OK_DONE);
-                    ButtonType CancelButton= new ButtonType("Cancel",ButtonData.OK_DONE);
-                    alert.getDialogPane().getButtonTypes().addAll(AgainButton,CancelButton);
-                    
-                    if(null != state)switch (state) {
-                        case "WIN":
-                            alert.setTitle("You Won !!");
-                            alert.setGraphic(new ImageView(this.getClass().getResource("win.png").toString()));
-                            alert.setContentText("You Won YAAAAY  !!");
-                            break;
-                        case "LOSE":
-                            alert.setTitle("You Lose !!");
-                            alert.setGraphic(new ImageView(this.getClass().getResource("lose.png").toString()));
-                            alert.setContentText("You Lose  :( :( ");
-                            break;
-                        case "DRAW":
-                            alert.setTitle("Game Over !!");
-                            alert.setGraphic(new ImageView(this.getClass().getResource("draw.png").toString()));
-                            alert.setContentText("No Winners Today ");
-                            break;
-                        default:
-                            break;
-                    }
-                    
-                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
-                    alert.setHeaderText(null);
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if(result.get() == AgainButton){
-                       new FXMLDocumentController().singlePlayWindow();
-                    } else if(result.get() == CancelButton){
-                       new FXMLDocumentController().playTypeWindow();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Dialog alert = new Dialog();
+                        alert.initStyle(StageStyle.UNDECORATED);
+                        ButtonType AgainButton= new ButtonType("Again",ButtonData.OK_DONE);
+                        ButtonType CancelButton= new ButtonType("Cancel",ButtonData.OK_DONE);
+                        alert.getDialogPane().getButtonTypes().addAll(AgainButton,CancelButton);
+                        if (null != state) {
+                            switch (state) {
+                                case "WIN":
+                                    alert.setTitle("You Won !!");
+                                    alert.setGraphic(new ImageView(FXMLDocumentController.this.getClass().getResource("win.png").toString()));
+                                    alert.setContentText("You Won YAAAAY  !!");
+                                    break;
+                                case "LOSE":
+                                    alert.setTitle("You Lose !!");
+                                    alert.setGraphic(new ImageView(FXMLDocumentController.this.getClass().getResource("lose.png").toString()));
+                                    alert.setContentText("You Lose  :( :( ");
+                                    break;
+                                case "DRAW":
+                                    alert.setTitle("Game Over !!");
+                                    alert.setGraphic(new ImageView(FXMLDocumentController.this.getClass().getResource("draw.png").toString()));
+                                    alert.setContentText("No Winners Today ");
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                        alert.setHeaderText(null);
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if(result.get() == AgainButton){
+
+                            //if(ptController.isType()) {
+                            System.out.println(currentFXML);
+                            if("GameCore".equals(currentFXML)) {
+                                new FXMLDocumentController().singlePlayWindow();
+                            } else {
+                                new FXMLDocumentController().listWindow();
+                            }
+
+                        } else if(result.get() == CancelButton){
+                            new FXMLDocumentController().playTypeWindow();
+                        }
                     }
                 }); }
     
@@ -397,6 +407,27 @@ Switching Scenes
                     }
        });
     }
+    
+    public void noConnect(){
+       Platform.runLater(() -> {
+            Dialog alert = new Dialog();
+                    alert.initStyle(StageStyle.UNDECORATED);
+                    
+                    ButtonType CancelButton= new ButtonType("Cancel",ButtonData.OK_DONE);
+                    alert.getDialogPane().getButtonTypes().addAll(CancelButton);
+                    alert.setTitle("No Connection !!");
+                    alert.setGraphic(new ImageView(this.getClass().getResource("no.png").toString()));
+                    alert.setContentText("Connection is Cut Off");
+                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                    alert.setHeaderText(null);
+                    Optional<ButtonType> result = alert.showAndWait();
+                    
+                    if(result.get() == CancelButton){
+                       new FXMLDocumentController().listWindow();
+                    }
+       });
+    }
+    
     
     public void playAccept(String idPl,String idP2){
        Platform.runLater(() -> {

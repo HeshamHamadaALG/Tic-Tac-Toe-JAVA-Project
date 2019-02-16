@@ -395,6 +395,12 @@ public class Player {
             }
         }
         boolean senario = GameController.dbManger.setGame(x, o, strArr);
+        try {
+            if(opponent.isOnline!=false)
+                opponent.output.writeObject(new Message("OpponentLeft",new String []{}));
+        } catch (IOException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println(senario);
         p.isOnline = false;
     }

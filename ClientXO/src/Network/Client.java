@@ -119,6 +119,9 @@ public class Client extends Thread {
                     System.out.println("ListPlayerReply");
                     fillPlayerList(msg.getData());
                 }
+                else if(msg.getType().equals("OpponentLeft")){
+                    System.out.println("OpponentLeft");
+                }
 
                 //end
             } catch (ClassNotFoundException ex) {

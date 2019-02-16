@@ -314,8 +314,14 @@ public class Player {
 //                     System.out.println("player : " + player.idnum + player.mark +" opponent : "+ opponent.idnum + opponent.mark );
                        System.out.println("x :" +x+ " o: "+o );
                        System.out.println(Arrays.toString(player.game.board));
+                       String strArr="";
+                        for(int i=0; i< player.game.board.length; i++){
+                            for(int j=0; j< player.game.board.length; j++)
+                              strArr+= player.game.board[i][j];
+                        }
+                          
 
-                      boolean senario = GameController.dbManger.setGame(x, o, Arrays.toString(player.game.board));
+                      boolean senario = GameController.dbManger.setGame(x, o, strArr);
                       System.out.println(senario);
                       Player.this.isOnline = false;
                        Player.this.input.close();

@@ -46,8 +46,8 @@ public class ListController implements Initializable {
     private TableView<Player> tableScores;
     @FXML
     private TableColumn<Player, Text> stateplay;
-    
-    public static int idOfOpponent;
+
+    public int idOfOpponent;
 
     public ListController() {
         this.tableScores = new TableView<>();
@@ -55,7 +55,7 @@ public class ListController implements Initializable {
         this.tblNames = new TableColumn();
         this.tblScore = new TableColumn();
         this.stateplay = new TableColumn();
-        
+
     }
 
     @FXML
@@ -82,24 +82,27 @@ public class ListController implements Initializable {
         tblScore.setCellValueFactory(new PropertyValueFactory<>("points"));
         stateplay.setCellValueFactory(new PropertyValueFactory<>("online"));
         tableScores.setOnMouseClicked((MouseEvent click) -> {
-          
-          if (click.getClickCount() == 2) {
-              tableScores.getSelectionModel().getSelectedItem();
-              idOfOpponent = ((Player) tableScores.getSelectionModel().getSelectedItem()).getIdnum();
-              System.out.println("ID OF Opponent "+idOfOpponent);
-              Message msg = new Message("multiPlay", new String[]{Integer.toString(ClientXO.getId()),Integer.toString(idOfOpponent)});
-              ClientXO.client.sendMessage(msg);
+            if (click.getClickCount() == 2) {
+                tableScores.getSelectionModel().getSelectedItem();
+                idOfOpponent = ((Player) tableScores.getSelectionModel().getSelectedItem()).getIdnum();
+                System.out.println("ID OF Opponent " + idOfOpponent);
+                if (ClientXO.getId() != idOfOpponent) {
+                    Message msg = new Message("multiPlay", new String[]{Integer.toString(ClientXO.getId()), Integer.toString(idOfOpponent)});
+                    ClientXO.client.sendMessage(msg);
 //              setIdOfOpponent(idOfOpponent);
-              String user = ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames();
-              System.out.println("You Clicked Player : " + ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames());
-              
-              new FXMLDocumentController().requestSent(user);
-          }
-      }); 
-        
+                    String user = ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames();
+                    System.out.println("You Clicked Player : " + ((Player) tableScores.getSelectionModel().getSelectedItem()).getNames());
+                    new FXMLDocumentController().requestSent(user);
+                }
+            }
+        });
+
+        //Lets Fill The List
+        Message msg = new Message("listRequest", new String[]{Integer.toString(ClientXO.getId())});
+        ClientXO.client.sendMessage(msg);
     }
 
-    public static int getIdOfOpponent() {
+    public int getIdOfOpponent() {
         return idOfOpponent;
     }
 

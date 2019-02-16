@@ -16,7 +16,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
+import serverxo.FXMLDocumentController;
+import serverxo.ServerXO;
 
 /**
  * ok
@@ -38,7 +42,6 @@ public class Player {
     boolean isOnline;
     Text online;
 
-
     /**
      * Constructs a handler thread for a given socket and mark initializes the
      * stream fields, displays the first two welcoming messages.
@@ -57,34 +60,37 @@ public class Player {
         this.isOnline = false;
     }
 
-
-    public void startThread(){
-        new Thread(new Runnable(){
-             public void run() {
-        try {
-            while (true) {
-                System.out.println("Listening Player");
-                Message msg = (Message) input.readObject();
-                if (msg == null) {       
-                    Player.this.isOnline = false;
-                    Player.this.input.close();
-                    Player.this.output.close();
-                    Player.this.socket.close();                   
-                    System.out.println("player is offline");
-                    return;
-                }
-                Player p1 = null;
-                Player p2 = null;
-                Message outputMsg = null;
-                //Sara
-                System.out.println(msg.getType());
-                if (msg.getType().equals("multiPlay")) {
-                    System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
-                    p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
-                    p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
-                    if (p2.isOnline) {
-                        Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
-                        p2.output.writeObject(playRequest);
+    public void startThread() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    while (true) {
+                        System.out.println("Listening Player");
+                        Message msg = (Message) input.readObject();
+                        Player p1 = null;
+                        Player p2 = null;
+                        Message outputMsg = null;
+                        System.out.println(msg.getType());
+                        if (msg == null || msg.getType().equals("CloseConn")) {
+                            if (Player.this.game != null) {
+                                handleCloseGame(Player.this);
+                            }
+                            Player.this.isOnline = false;
+                            Player.this.input.close();
+                            Player.this.output.close();
+                            Player.this.socket.close();
+                            System.out.println("player is offline");
+                            FXMLDocumentController.updatePlayerList();
+                            Player.broadCastPlayerList();
+                            return;
+                        }
+                        if (msg.getType().equals("multiPlay")) {
+                            System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
+                            p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+                            p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+                            if (p2.isOnline) {
+                                Message playRequest = (new Message("playRequest", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
+                                p2.output.writeObject(playRequest);
 
                             }
                         } else if (msg.getType().equals("playRequest")) {
@@ -92,11 +98,11 @@ public class Player {
                                 p1 = getPlayer(Integer.parseInt(msg.getData()[1]));
                                 p2 = getPlayer(Integer.parseInt(msg.getData()[2]));
                                 if (p1.isOnline && p2.isOnline) {
-                                    String senario = GameController.dbManger.getGameBoard(msg);
-                                    outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum), senario}));
+                                    String []oldGame = GameController.dbManger.getGameBoard(msg);
+                                    outputMsg = (new Message("play", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum), oldGame[0]}));
                                     p1.output.writeObject(outputMsg);
                                     p2.output.writeObject(outputMsg);
-                                    intializeMultiGame(p1, p2);
+                                    intializeMultiGame(p1, p2, oldGame[0],oldGame[1]);
                                 }
                             } else {
                                 Message rejected = (new Message("reject", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
@@ -105,10 +111,8 @@ public class Player {
                         } else if (msg.getType().equals("chatting")) {
                             Player player = null;
                             player = getPlayer(Integer.parseInt(msg.getData()[0]));
-
                             MultiGame multiGame = (MultiGame) player.game;
                             Player opponent = (player == multiGame.p1) ? multiGame.p2 : multiGame.p1;
-                            //p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
                             Message chat = new Message("chatting", new String[]{msg.getData()[0], msg.getData()[1], player.getNames(), opponent.getNames()});
                             player.output.writeObject(chat);
                             opponent.output.writeObject(chat);
@@ -141,16 +145,18 @@ public class Player {
                             player.output.writeObject(outputMsg);
                         }
                         //end
-
                     }
                 } catch (IOException ex) {
                     try {
                         System.out.println("Player is offline catch");
+                        if (Player.this.game != null) {
+                            handleCloseGame(Player.this);
+                        }
                         broadCastPlayerList();
+                        FXMLDocumentController.updatePlayerList();
+                        Player.broadCastPlayerList();
                         Player.this.isOnline = false;
                         if (!Player.this.socket.isClosed()) {
-//                            Player.this.input.close();
-//                            Player.this.output.close();
                             Player.this.socket.close();
                         }
                         return;
@@ -161,32 +167,28 @@ public class Player {
                     Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }).start();
+        }
+        ).start();
 
     }
 
     public void handleMultiplayer(Message msg) {
-        ArrayList<Player> players = GameController.players;
-        int playersSize = players.size();
         Message outputMsg = null;
         Player p1 = null;
         Player p2 = null;
         System.out.println(msg.getData()[0] + " " + msg.getData()[1]);
-        for (int i = 0; i < playersSize; i++) {
-            if (players.get(i).idnum == Integer.parseInt(msg.getData()[0])) {
-                p1 = players.get(i);
-            }
-            if (players.get(i).idnum == Integer.parseInt(msg.getData()[1])) {
-                p2 = players.get(i);
-            }
-        }
+        p1 = getPlayer(Integer.parseInt(msg.getData()[0]));
+        p2 = getPlayer(Integer.parseInt(msg.getData()[1]));
+
         if (p1.isOnline && p2.isOnline) {
             try {
                 outputMsg = (new Message("multiPlay", new String[]{Integer.toString(p1.idnum), Integer.toString(p2.idnum)}));
                 p1.output.writeObject(outputMsg);
                 p2.output.writeObject(outputMsg);
+
             } catch (IOException ex) {
-                Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Player.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -200,7 +202,7 @@ public class Player {
         player.mark = 'X';
     }
 
-    public void intializeMultiGame(Player p1, Player p2) {
+    public void intializeMultiGame(Player p1, Player p2, String Scenario,String Xplayer) {
         MultiGame game = new MultiGame();
         game.p1 = p1;
         game.p2 = p2;
@@ -209,6 +211,39 @@ public class Player {
         p1.mark = 'X';
         p2.game = game;
         p2.mark = 'O';
+        p2.opponent = p1;
+        p1.opponent = p2;
+        if (!Scenario.equals("")) {
+            int ind = 0;
+            int xCounter = 0;
+            int oCounter = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    char T = Scenario.charAt(ind++);
+                    if (T =='X') {
+                        xCounter++;
+                        game.board[j][i] = 'X';
+                    }
+                    else if(T == 'O'){
+                        oCounter++;
+                        game.board[j][i] = 'O';
+                    }
+                    System.out.print(game.board[i][j]);
+                }
+                System.out.println();
+            }
+            if(oCounter == xCounter)
+                game.turn = 'X';
+            else game.turn = 'O';
+            if(p1.idnum==Integer.parseInt(Xplayer)){
+                p1.mark='X';
+                p2.mark='O';
+            }
+            else {
+                p1.mark='O';
+                p2.mark='X';
+            }
+        }
     }
 
     public void handleMove(Message msg) {
@@ -223,7 +258,7 @@ public class Player {
         }
     }
 
-    public void broadCastPlayerList() {
+    public static void broadCastPlayerList() {
         ArrayList<Player> players = GameController.players;
         int listSize = players.size();
         for (int i = 0; i < listSize; i++) {
@@ -261,6 +296,9 @@ public class Player {
                         player.setPoints(points += 15);
                     }
                     GameController.dbManger.update(player);
+                    FXMLDocumentController.sortPlayerList();
+                    FXMLDocumentController.updatePlayerList();
+                    Player.broadCastPlayerList();
 
                 } else if (singleGame.boardFilledUp()) {
                     Thread.sleep(500);
@@ -277,15 +315,21 @@ public class Player {
                     } else if (singleGame.boardFilledUp()) {
                         Thread.sleep(500);
                         player.output.writeObject(new Message("DRAW", new String[]{}));
+
                     }
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Player.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (InterruptedException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Player.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (SQLException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Player.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -297,74 +341,62 @@ public class Player {
                 player.output.writeObject(new Message("Move " + player.mark + " " + col + " " + row, new String[]{}));
                 opponent.output.writeObject(new Message("Move " + player.mark + " " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
-                System.out.println("player : " + player.idnum + player.mark +" opponent : "+ opponent.idnum + opponent.mark );
+                System.out.println("player : " + player.idnum + player.mark + " opponent : " + opponent.idnum + opponent.mark);
 
-                try{
-                    Message msg = (Message) input.readObject();
-                    if (msg == null || msg.getType().equals("CloseConn") ) {
-                        int x, o;
-                        if(player.mark == 'X'){
-                             x = player.idnum;
-                             o = opponent.idnum;
-                        }
-                        else {
-                            o = player.idnum;
-                            x= opponent.idnum;
-                        }
-//                     System.out.println("player : " + player.idnum + player.mark +" opponent : "+ opponent.idnum + opponent.mark );
-                       System.out.println("x :" +x+ " o: "+o );
-                       System.out.println(Arrays.toString(player.game.board));
-                       String strArr="";
-                        for(int i=0; i< player.game.board.length; i++){
-                            for(int j=0; j< player.game.board.length; j++)
-                              strArr+= player.game.board[i][j];
-                        }
-                          
-
-                      boolean senario = GameController.dbManger.setGame(x, o, strArr);
-                      System.out.println(senario);
-                      Player.this.isOnline = false;
-                       Player.this.input.close();
-                       Player.this.output.close();
-                       Player.this.socket.close();
-
-                       System.out.println("player is offline");
-
-
-
-                   }
-                }
-                catch (IOException ex) {
-                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                }
-      
-               
-                            
-                    
                 if (multiGame.hasWinner()) {
                     if (multiGame instanceof MultiGame) {
                         Thread.sleep(500);
                         player.output.writeObject(new Message("WIN", new String[]{}));
                         opponent.output.writeObject(new Message("LOSE", new String[]{}));
                         player.setPoints(points += 10);
+                        FXMLDocumentController.sortPlayerList();
                         GameController.dbManger.update(player);
+                        GameController.dbManger.deleteOldGame(player.idnum,opponent.idnum);
+                        FXMLDocumentController.updatePlayerList();
+                        Player.broadCastPlayerList();
                     }
 
                 } else if (multiGame.boardFilledUp()) {
                     Thread.sleep(500);
                     player.output.writeObject(new Message("DRAW", new String[]{}));
                     opponent.output.writeObject(new Message("DRAW", new String[]{}));
+
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Player.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (InterruptedException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Player.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (SQLException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Player.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void handleCloseGame(Player p) {
+        int x, o;
+        if (p.mark == 'X') {
+            x = p.idnum;
+            o = opponent.idnum;
+        } else {
+            o = p.idnum;
+            x = opponent.idnum;
+        }
+        System.out.println("x :" + x + " o: " + o);
+        System.out.println(Arrays.toString(p.game.board));
+        String strArr = "";
+        for (int i = 0; i < p.game.board.length; i++) {
+            for (int j = 0; j < p.game.board.length; j++) {
+                strArr += p.game.board[j][i];
+            }
+        }
+        boolean senario = GameController.dbManger.setGame(x, o, strArr);
+        System.out.println(senario);
+        p.isOnline = false;
     }
 
     public Player getPlayer(int id) {
@@ -379,7 +411,7 @@ public class Player {
         return player;
     }
 
-    public String[] playerListToArray(ArrayList<Player> playerList) {
+    public static String[] playerListToArray(ArrayList<Player> playerList) {
         int listSize = playerList.size();
         String[] result = new String[listSize];
         for (int i = 0; i < listSize; i++) {
@@ -471,14 +503,15 @@ public class Player {
     public void setOpponent(Player opponent) {
         this.opponent = opponent;
     }
-    
+
     public Text getOnline() {
-        if(isOnline == true){
-              online = new Text("Online");
-              online.setStyle("-fx-fill: green; -fx-font-weight: bold;");
-        } else if(isOnline == false){
-              online = new Text("Offline");
-              online.setStyle("-fx-fill: red; -fx-font-weight: bold;");        }
+        if (isOnline == true) {
+            online = new Text("Online");
+            online.setStyle("-fx-fill: green; -fx-font-weight: bold;");
+        } else if (isOnline == false) {
+            online = new Text("Offline");
+            online.setStyle("-fx-fill: red; -fx-font-weight: bold;");
+        }
         return online;
     }
 

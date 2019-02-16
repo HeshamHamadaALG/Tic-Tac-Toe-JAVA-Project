@@ -102,10 +102,6 @@ public class playTypeController implements Initializable {
 //         Message msg = new Message("multiPlay",new String []{Integer.toString(ClientXO.getId()),"2"});
 //         ClientXO.client.sendMessage(msg);
         new FXMLDocumentController().listWindow();
-        Message msg = new Message("listRequest", new String[]{Integer.toString(ClientXO.getId())});
-        ClientXO.client.sendMessage(msg);
-        
-        
         System.out.println("Multi Player Pressed");
 
         //end

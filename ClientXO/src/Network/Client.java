@@ -44,20 +44,17 @@ public class Client extends Thread {
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
     }
-    
-    public void closeConn(){
-        try{
+
+    public void closeConn() {
+        try {
             this.input.close();
             this.socket.close();
             this.output.close();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             System.out.println("can't close the session");
- 
+
         }
     }
-    
-
 
     public void sendMessage(Message msg) {
         try {
@@ -83,20 +80,20 @@ public class Client extends Thread {
                 if (msg.getType().equals("Login")) {
                     System.out.println(msg.getData()[0]);
                     isLogged = handleLogin(msg);
-                }
-                
-                else if(msg.getType().equals("Signup")){
+                } else if (msg.getType().equals("Signup")) {
                     System.out.println(msg.getData()[0]);
                     handleSignup(msg);
-                }
-                    //sara
-                else if (msg.getType().equals("playRequest")) {                 
-                    new FXMLDocumentController().playAccept(msg.getData()[0],msg.getData()[1]);
-                    
+                } //sara
+                else if (msg.getType().equals("playRequest")) {
+                    new FXMLDocumentController().playAccept(msg.getData()[0], msg.getData()[1]);
+
                     //playRequest();
                 } else if (msg.getType().equals("play")) {
                     System.out.println(msg.getData()[2]);
                     new FXMLDocumentController().multiGameWindow();
+                    if (!msg.getData()[2].equals("")) {
+                        retrieveOldGame(msg.getData()[2]);
+                    }
                 } else if (msg.getType().equals("chatting")) {
                     handleChatting(msg.getData());
                 } else if (msg.getType().equals("StartEasyGame")) {
@@ -214,12 +211,51 @@ public class Client extends Thread {
         return playerList;
     }
 
+    public void retrieveOldGame(String scenario) {
+        Platform.runLater(() -> {
+            int ind=0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    char T = scenario.charAt(ind++);
+                    if(T=='X'||T=='O'){
+                        ImageView Turn = new ImageView(new Image(getClass().getResourceAsStream(T + ".png")));
+                        int col = j;
+                        int row = i;
+                        String btnId = "";
+                        if (col == 0 && row == 0) {
+                            btnId = "1";
+                        } else if (col == 1 && row == 0) {
+                            btnId = "2";
+                        } else if (col == 2 && row == 0) {
+                            btnId = "3";
+                        } else if (col == 0 && row == 1) {
+                            btnId = "4";
+                        } else if (col == 1 && row == 1) {
+                            btnId = "5";
+                        } else if (col == 2 && row == 1) {
+                            btnId = "6";
+                        } else if (col == 0 && row == 2) {
+                            btnId = "7";
+                        } else if (col == 1 && row == 2) {
+                            btnId = "8";
+                        } else if (col == 2 && row == 2) {
+                            btnId = "9";
+                        }
+                        Button btn = (Button) ClientXO.getGlobalStage().getScene().lookup("#btn" + btnId);
+                        btn.setGraphic(Turn);
+                    }
+                }
+            }
+        });
+    }
+
+    ;
     public void handleChatting(String msg[]) {
         Platform.runLater(() -> {
 
             TextArea chatArea = (TextArea) ClientXO.getGlobalStage().getScene().lookup("#chatArea");
             if (chatArea != null) {
-                chatArea.setText(chatArea.getText()+msg[2] + ": " + msg[1]);
+                chatArea.setText(chatArea.getText() + msg[2] + ": " + msg[1]);
                 System.out.println(msg[2] + ": " + msg[1]);
             }
         });
@@ -229,18 +265,19 @@ public class Client extends Thread {
         // show pop up to ask user if he wants to play, if he click OK, the client will send a message of type playRequest, and accept data
 
     }
-     public void redirectToLogin(){
-         new FXMLDocumentController().logInWindow();
+
+    public void redirectToLogin() {
+        new FXMLDocumentController().logInWindow();
     }
- public boolean handleSignup(Message msg) {
+
+    public boolean handleSignup(Message msg) {
         if (msg.getData()[0].equals("Accept")) {
-           redirectToLogin();
-           return true;
-        }
-        else{
-        Platform.runLater(()
-                -> new FXMLDocumentController().alertSignUpUsername());
-        return false;
+            redirectToLogin();
+            return true;
+        } else {
+            Platform.runLater(()
+                    -> new FXMLDocumentController().alertSignUpUsername());
+            return false;
         }
     }
 }

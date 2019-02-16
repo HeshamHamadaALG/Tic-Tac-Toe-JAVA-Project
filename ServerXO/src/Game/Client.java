@@ -10,6 +10,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import serverxo.FXMLDocumentController;
+import serverxo.ServerXO;
 
 /**
  *
@@ -138,7 +140,8 @@ class Client extends Thread {
                 }
             }
         }
-
+        FXMLDocumentController.updatePlayerList();
+        Player.broadCastPlayerList();
     }
 
 }

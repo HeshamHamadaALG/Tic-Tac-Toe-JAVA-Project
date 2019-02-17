@@ -368,7 +368,7 @@ Switching Scenes
                                     break;
                             }
                         }
-                        alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                        alert.getDialogPane().setStyle("-fx-background-color:#85A7E4;");
                         alert.setHeaderText(null);
                         Optional<ButtonType> result = alert.showAndWait();
                         if(result.get() == AgainButton){
@@ -398,7 +398,7 @@ Switching Scenes
                     alert.setTitle("Play request !!");
 //                    alert.setGraphic(new ImageView(this.getClass().getResource("win.png").toString()));
                     alert.setContentText("You sent Request to : " + user + "\n Waiting For Respond" );
-                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                    alert.getDialogPane().setStyle("-fx-background-color:#85A7E4;");
                     alert.setHeaderText(null);
                     Optional<ButtonType> result = alert.showAndWait();
                     
@@ -418,7 +418,7 @@ Switching Scenes
                     alert.setTitle("No Connection !!");
                     alert.setGraphic(new ImageView(this.getClass().getResource("no.png").toString()));
                     alert.setContentText("Connection is Cut Off");
-                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                    alert.getDialogPane().setStyle("-fx-background-color:#85A7E4;");
                     alert.setHeaderText(null);
                     Optional<ButtonType> result = alert.showAndWait();
                     
@@ -440,7 +440,7 @@ Switching Scenes
                     alert.setTitle("Play request !!");
 //                    alert.setGraphic(new ImageView(this.getClass().getResource("win.png").toString()));
                     alert.setContentText(idPl+ "Sent You Request to play" );
-                    alert.getDialogPane().setStyle("-fx-background-color:#D5F200;");
+                    alert.getDialogPane().setStyle("-fx-background-color:#85A7E4;");
                     alert.setHeaderText(null);
                     
              Optional<ButtonType> result = alert.showAndWait();

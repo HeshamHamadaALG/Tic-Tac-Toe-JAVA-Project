@@ -11,7 +11,10 @@ import Game.Player;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -63,7 +66,7 @@ public class FXMLDocumentController implements Initializable {
     DBManger db = new DBManger();
     GameController gc;
 
-    ObservableList<Player> usersList ;//= FXCollections.observableArrayList();
+    static ObservableList<Player> usersList = FXCollections.observableArrayList();
 
     public FXMLDocumentController() {
         this.tableScores = new TableView<>();
@@ -71,7 +74,6 @@ public class FXMLDocumentController implements Initializable {
         this.tblNames = new TableColumn();
         this.tblScore = new TableColumn();
         this.stateplay = new TableColumn();
-        usersList = FXCollections.observableArrayList();
     }
 
     @FXML
@@ -131,23 +133,6 @@ public class FXMLDocumentController implements Initializable {
         btn.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("off.png"))));
         // Funn Server Pics
         funBic.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/image/sleep.png"))));
-//         ArrayList<String> playerList =new ArrayList<String>();
-//        
-//        // Database Connection
-//        Connection con = db.getConnect();
-//        System.out.println("====> DataBase Connected <====");  
-//        try {
-//            ResultSet rs = con.createStatement().executeQuery("select * from players ;");
-//            while(rs.next()){
-//                usersList.add(new Player(rs.getInt("id"),rs.getString("name"),rs.getInt("points")));
-//                System.out.println("Id : " +  rs.getInt("id") + "  Name : "  + rs.getString("name") + "  Points : " + rs.getInt("points"));
-//                playerList.add(rs.getInt("id") + " "  + rs.getString("name") + " " + rs.getInt("points"));
-//            }
-//                System.out.println("===> table Connected");
-//        } catch (SQLException ex) {
-//            System.out.println("===>  No table Connection");
-//            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
 
         //Initializing the columns 
         tblId.setCellValueFactory(new PropertyValueFactory<>("idnum"));
@@ -166,7 +151,7 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    public void loadUserList() {
+    public static void loadUserList() {
         ArrayList<Player> playerList = GameController.players;
         int listSize = playerList.size();
         usersList.clear();
@@ -175,7 +160,26 @@ public class FXMLDocumentController implements Initializable {
             usersList.add(p);
             System.out.println("Id : " + p.getIdnum() + "  Name : " + p.getNames() + "  Points : " + p.getPoints());
         }
-        System.out.println("UserList Size: "+usersList.size());
+        System.out.println("UserList Size: " + usersList.size());
     }
 
+    public static void updatePlayerList() {
+        Platform.runLater(() -> {
+            TableView<Player> playerTable = (TableView<Player>) ServerXO.getGlobalStage().getScene().lookup("#tableScores");
+            if (playerTable != null) {
+                System.out.println("FILL THE TABLE");
+                loadUserList();
+                playerTable.setItems(usersList);
+                //tableScores.setItems(usersList);
+            }
+        });
+    }
+    public static void sortPlayerList(){
+    Collections.sort(GameController.players, new Comparator<Player>() {
+            @Override
+            public int compare(Player p1, Player p2) {
+                return p2.getPoints() - p1.getPoints();
+            }
+        });
+    }
 }

@@ -21,7 +21,9 @@ public class ServerXO extends Application {
 
     private double x = 0;
     private double y = 0;
+    private static Stage globalStage;
 
+ 
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
@@ -38,6 +40,7 @@ public class ServerXO extends Application {
             stage.setX(event.getScreenX() - x);
             stage.setY(event.getScreenY() - y);
         });
+        globalStage = stage;
         stage.setScene(scene);
         stage.show();
     }
@@ -49,5 +52,10 @@ public class ServerXO extends Application {
         launch(args);
 
     }
+
+       public static Stage getGlobalStage() {
+        return globalStage;
+    }
+
 
 }

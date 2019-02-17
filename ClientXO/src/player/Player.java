@@ -16,20 +16,20 @@ public class Player {
     int idnum;
     String names;
     int points;
-    boolean isOnline;
+    int isOnline;
     Text online;
 
 
      public Player() {
         this.idnum = -1;
-        this.isOnline = false;
+        this.isOnline = 0;
     }
 
     public Player(int ID, String name, int points) {
         this.idnum = ID;
         this.names = name;
         this.points = points;
-        this.isOnline = false;
+        this.isOnline = 0;
     }
 
     public int getIdnum() {
@@ -56,21 +56,25 @@ public class Player {
         this.points = points;
     }
 
-    public boolean isIsOnline() {
+    public int isIsOnline() {
         return isOnline;
     }
 
-    public void setIsOnline(boolean isOnline) {
+    public void setIsOnline(int isOnline) {
         this.isOnline = isOnline;
     }
 
     public Text getOnline() {
-        if(isOnline == true){
+        if(isOnline == 1){
               online = new Text("Online");
               online.setStyle("-fx-fill: green; -fx-font-weight: bold;");
-        } else if(isOnline == false){
+        } else if(isOnline == 0){
               online = new Text("Offline");
-              online.setStyle("-fx-fill: red; -fx-font-weight: bold;");        }
+              online.setStyle("-fx-fill: red; -fx-font-weight: bold;"); 
+        }else if(isOnline == 2){
+              online = new Text("Busy");
+              online.setStyle("-fx-fill: orange; -fx-font-weight: bold;"); 
+        }
         return online;
     }
 

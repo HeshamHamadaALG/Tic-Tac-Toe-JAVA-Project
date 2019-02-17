@@ -70,17 +70,6 @@
          <cursor>
            <!-- <Cursor fx:constant="DEFAULT" /> -->
          </cursor></AnchorPane>
-      <Button layoutX="18.0" layoutY="19.0" mnemonicParsing="false" onAction="#backAction" opacity="0.7" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #543D9E; -fx-border-color: #ffffff; -fx-border-radius: 40; -fx-background-radius: 40;" text="&lt;= Back" textFill="WHITE">
-         <font>
-            <Font size="16.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </Button>
       <TextField fx:id="chatWrite" layoutX="577.0" layoutY="484.0" prefHeight="46.0" prefWidth="266.0" />
       <Button layoutX="849.0" layoutY="487.0" mnemonicParsing="false" onAction="#sendChat" opacity="0.7" prefHeight="39.0" prefWidth="80.0" style="-fx-background-color: #543D9E; -fx-border-color: #ffffff; -fx-border-radius: 40; -fx-background-radius: 40;" text="&lt; Send" textFill="WHITE">
          <font>

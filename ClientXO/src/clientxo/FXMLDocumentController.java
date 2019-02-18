@@ -439,7 +439,7 @@ Switching Scenes
                     alert.getDialogPane().getButtonTypes().addAll(AcceptButton,CancelButton);
                     alert.setTitle("Play request !!");
 //                    alert.setGraphic(new ImageView(this.getClass().getResource("win.png").toString()));
-                    alert.setContentText(idPl+ "Sent You Request to play" );
+                    alert.setContentText(idPl+ "  Sent You Request to play" );
                     alert.getDialogPane().setStyle("-fx-background-color:#85A7E4;");
                     alert.setHeaderText(null);
                     

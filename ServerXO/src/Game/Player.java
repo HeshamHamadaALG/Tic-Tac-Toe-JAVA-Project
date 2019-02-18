@@ -294,6 +294,8 @@ public class Player {
                 player.output.writeObject(new Message("Move X " + col + " " + row, new String[]{}));
                 game.noOfTurns++;
                 if (singleGame.hasWinner()) {
+                    player.isOnline =1;
+                    Player.broadCastPlayerList();
                     //Add Winning Points
                     Thread.sleep(500);
                     player.output.writeObject(new Message("WIN", new String[]{}));
@@ -312,6 +314,8 @@ public class Player {
                     Player.broadCastPlayerList();
 
                 } else if (singleGame.boardFilledUp()) {
+                    player.isOnline =1;
+                    Player.broadCastPlayerList();
                     Thread.sleep(500);
                     player.output.writeObject(new Message("DRAW", new String[]{}));
                 } else {
@@ -358,6 +362,9 @@ public class Player {
                 System.out.println("player : " + player.idnum + player.mark + " opponent : " + opponent.idnum + opponent.mark);
 
                 if (multiGame.hasWinner()) {
+                    player.isOnline =1;
+                    opponent.isOnline = 1;
+                    Player.broadCastPlayerList();
                     if (multiGame instanceof MultiGame) {
                         Thread.sleep(500);
                         player.output.writeObject(new Message("WIN", new String[]{}));
@@ -371,7 +378,11 @@ public class Player {
                     }
 
                 } else if (multiGame.boardFilledUp()) {
+                    player.isOnline =1;
+                    opponent.isOnline = 1;
+                    Player.broadCastPlayerList();
                     Thread.sleep(500);
+                    GameController.dbManger.deleteOldGame(player.idnum,opponent.idnum);
                     player.output.writeObject(new Message("DRAW", new String[]{}));
                     opponent.output.writeObject(new Message("DRAW", new String[]{}));
 

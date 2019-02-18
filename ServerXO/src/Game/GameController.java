@@ -26,7 +26,7 @@ public class GameController extends Thread {
         try {
             dbManger = new DBManger();
             players = dbManger.loadPlayer();
-            listener = new ServerSocket(8901);
+            listener = new ServerSocket(5050);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

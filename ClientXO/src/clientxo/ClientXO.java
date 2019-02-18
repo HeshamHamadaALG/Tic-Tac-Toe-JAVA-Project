@@ -58,7 +58,7 @@ public class ClientXO extends Application {
         stage.show();
         try {
             // TODO
-            client = new Client(new Socket("localhost", 8901));
+            client = new Client(new Socket("localhost", 5050));
             client.start();
             System.out.println("Client Connect to Server");
         } catch (IOException ex) {

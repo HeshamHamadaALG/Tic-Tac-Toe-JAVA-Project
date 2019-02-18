@@ -110,4 +110,14 @@ public class ListController implements Initializable {
         this.idOfOpponent = idOfOpponent;
     }
 
+    public TableView<Player> getTableScores() {
+        return tableScores;
+    }
+
+    public void setTableScores(TableView<Player> tableScores) {
+        this.tableScores = tableScores;
+    }
+    
+    
+
 }

@@ -73,7 +73,8 @@ public class Player {
                         System.out.println(msg.getType());
                         if (msg == null || msg.getType().equals("CloseConn")) {
                             if (Player.this.game != null) {
-                                handleCloseGame(Player.this);
+                                if(Player.this.game instanceof MultiGame)
+                                      handleCloseGame(Player.this);
                             }
                             Player.this.isOnline = 0;
                             Player.this.input.close();
@@ -148,7 +149,7 @@ public class Player {
                     }
                 } catch (IOException ex) {
                     try {
-                        System.out.println("Player is offline catch");
+                        System.out.println("Player is offline");
                         if (Player.this.game != null) {
                             handleCloseGame(Player.this);
                         }
@@ -319,15 +320,20 @@ public class Player {
                     Thread.sleep(500);
                     player.output.writeObject(new Message("DRAW", new String[]{}));
                 } else {
+                    
                     int move[] = singleGame.computerTurn();
                     game.noOfTurns++;
                     singleGame.legalMove(move[0], move[1], 'O');
                     player.output.writeObject(new Message("Move O " + move[0] + " " + move[1], new String[]{}));
                     System.out.println("Computer Mover " + move[0] + " " + move[1]);
                     if (singleGame.hasWinner()) {
+                        player.isOnline =1;
+                        Player.broadCastPlayerList();
                         Thread.sleep(500);
                         player.output.writeObject(new Message("LOSE", new String[]{}));
                     } else if (singleGame.boardFilledUp()) {
+                        player.isOnline =1;
+                        Player.broadCastPlayerList();
                         Thread.sleep(500);
                         player.output.writeObject(new Message("DRAW", new String[]{}));
 
@@ -421,13 +427,15 @@ public class Player {
         }
         boolean senario = GameController.dbManger.setGame(x, o, strArr);
         try {
-            if(opponent.isOnline!= 1)
+            if(opponent.isOnline == 0)
+                p.isOnline = 1;
                 opponent.output.writeObject(new Message("OpponentLeft",new String []{}));
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(senario);
         p.isOnline = 0;
+        opponent.isOnline = 1;
     }
 
     public Player getPlayer(int id) {

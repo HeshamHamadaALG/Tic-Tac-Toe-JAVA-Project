@@ -5,9 +5,11 @@
  */
 package Game;
 
+import static Game.GameController.dbManger;
 import Network.Message;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import serverxo.FXMLDocumentController;
@@ -32,7 +34,7 @@ class Client extends Thread {
     public void run() {
         int isLogin = -1;
         boolean isSignup = false;
-        while (isLogin == -1 && isSignup == false) {
+        while (isLogin == -1) {
             try {
 
                 Message msg = (Message) input.readObject();
@@ -66,12 +68,16 @@ class Client extends Thread {
                 isSignup = GameController.dbManger.signUp(msg.getData()[0], msg.getData()[1], msg.getData()[2]);
             }
             if (isSignup != false) {
+                ArrayList<Player> players = GameController.players;
+                players.add(new Player(GameController.players.size()+1, msg.getData()[0],0));
+                FXMLDocumentController.updatePlayerList();
+                Player.broadCastPlayerList();
                 msg = new Message("Signup", new String[]{"Accept", Integer.toString(1)});
                 output.writeObject(msg);
-           } else {
+            } else {
                 msg = new Message("Signup", new String[]{"Wrong", Integer.toString(1)});
                 output.writeObject(msg);
-              
+
             }
             System.out.println(msg.getType());
         } catch (IOException ex) {
